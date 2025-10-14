@@ -7,48 +7,29 @@ import Login from "./components/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import TaskDetails from "./pages/TaskDetails";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import AdminPanel from "./pages/AdminPanel";
+import NotFound from "./pages/NotFound";
 import type { User } from "firebase/auth";
-import { Box, CircularProgress, Typography } from "@mui/material";
 
+const ADMIN_EMAIL = "ludlowbecker@gmail.com"; // 👈 replace with your real Google account email
 
 const App = () => {
   const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true); 
-
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (u) => {
       setUser(u);
-      setLoading(false); 
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-
-
-
-if (loading) 
-return (
-    <Box
-      sx={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        bgcolor: "#000",
-      }}
-    >
-      <CircularProgress sx={{ color: "#00ff88", mb: 2 }} />
-      <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code", fontSize: "1.2rem" }}>
-        Booting Hackry...
-      </Typography>
-    </Box>
-  );
-
-  
-
+  if (loading) return <div>Loading...</div>;
   if (!user) return <Login />;
+
+  const isAdmin = user.email === ADMIN_EMAIL; // isaAdmin will be confirmed by backend
 
   return (
     <Router>
@@ -57,8 +38,10 @@ return (
         <Route path="/" element={<Home />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/task/:id" element={<TaskDetails />} />
-        <Route path="*" element={<Navigate to="/" />} />
+        {isAdmin && <Route path="/admin" element={<AdminPanel />} />} {/* 🔐 Protected */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
+      <Footer />
     </Router>
   );
 };

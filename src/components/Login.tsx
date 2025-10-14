@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Box, Typography } from "@mui/material";
 import { auth, provider, signInWithPopup } from "../auth/firebase";
 import { Google } from "@mui/icons-material";
+import { Typewriter } from "react-simple-typewriter";
+
 
 const Login = () => {
   const handleGoogleLogin = async () => {
@@ -40,6 +42,34 @@ const Login = () => {
       >
         Login with Google
       </Button>
+
+
+      <Typography
+        variant="body1"
+        sx={{
+          color: "#00ff88",
+          maxWidth: "600px",
+          px: 2,
+          fontSize: "1.1rem",
+          whiteSpace: "pre-line",
+          marginTop: "2rem",
+        }}
+      >
+        <Typewriter
+          words={[
+            "Welcome to Hackry — a platform for ethical hackers.",
+            "Solve real-world cybersecurity challenges.",
+            "Sharpen your skills. Climb the leaderboard. Rule the grid.",
+          ]}
+          loop={0}
+          cursor
+          cursorStyle="_"
+          typeSpeed={40}
+          deleteSpeed={25}
+          delaySpeed={2000}
+        />
+      </Typography>
+
     </Box>
   );
 };

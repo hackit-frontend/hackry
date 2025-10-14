@@ -9,8 +9,8 @@ const Dashboard: React.FC = () => {
       sx={{
         p: 4,
         display: "flex",
-        flexDirection: { xs: "column", md: "row" }, // stack on mobile, row on desktop
-        gap: 4, // space between cards
+        flexDirection: { xs: "column", md: "row" }, 
+        gap: 4, 
       }}
     >
       <Box sx={{ flex: 1, minWidth: 300 }}>
