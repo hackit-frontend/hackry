@@ -12,7 +12,6 @@ const Progress: React.FC = () => {
   const [progress, setProgress] = useState<UserProgress | null>(null);
 
   useEffect(() => {
-    // Fetch progress from backend (replace URL with your API)
     if (user) {
       fetch(`http://localhost:5000/api/users/${user.uid}/progress`)
         .then((res) => res.json())
