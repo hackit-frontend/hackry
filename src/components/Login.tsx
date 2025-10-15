@@ -53,6 +53,7 @@ const Login = () => {
           fontSize: "1.1rem",
           whiteSpace: "pre-line",
           marginTop: "2rem",
+          textAlign: "center",
         }}
       >
         <Typewriter
@@ -61,6 +62,7 @@ const Login = () => {
             "Solve real-world cybersecurity challenges.",
             "Sharpen your skills. Climb the leaderboard. Rule the grid.",
           ]}
+          
           loop={0}
           cursor
           cursorStyle="_"

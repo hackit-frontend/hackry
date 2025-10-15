@@ -11,6 +11,8 @@ import Footer from "./components/Footer";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
 import type { User } from "firebase/auth";
+import { Box, CircularProgress, Typography } from "@mui/material";
+
 
 const ADMIN_EMAIL = "ludlowbecker@gmail.com"; // 👈 replace with your real Google account email
 
@@ -26,8 +28,25 @@ const App = () => {
     return () => unsubscribe();
   }, []);
 
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <Login />;
+
+if (loading) 
+return (
+    <Box
+      sx={{
+        height: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        bgcolor: "#000",
+      }}
+    >
+      <CircularProgress sx={{ color: "#00ff88", mb: 2 }} />
+      <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code", fontSize: "1.2rem" }}>
+        Booting Hackry...
+      </Typography>
+    </Box>
+  );  if (!user) return <Login />;
 
   const isAdmin = user.email === ADMIN_EMAIL; // isaAdmin will be confirmed by backend
 
