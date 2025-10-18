@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Box, Typography } from "@mui/material";
 import { auth, provider, signInWithPopup } from "../auth/firebase";
 import { Google } from "@mui/icons-material";

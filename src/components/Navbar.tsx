@@ -9,7 +9,7 @@ interface Props {
   onLogout: () => void;
 }
 
-const Navbar: React.FC<Props> = ({ user, onLogout }) => (
+const Navbar: React.FC<Props> = ({  onLogout }) => (
   <AppBar position="static" sx={{ bgcolor: "black" }}>
     <Toolbar>
       <Typography
