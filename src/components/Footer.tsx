@@ -1,7 +1,10 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Footer: React.FC = () => {
+  const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -22,7 +25,7 @@ const Footer: React.FC = () => {
           fontFamily: "Fira Code",
         }}
       >
-        © {new Date().getFullYear()} Hackry — Level up your hacking skills 
+        © {new Date().getFullYear()} HackLab — {t("footerText")}
       </Typography>
     </Box>
   );

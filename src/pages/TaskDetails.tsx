@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 interface Task {
   id: string;
@@ -9,6 +10,7 @@ interface Task {
 }
 
 const TaskDetails: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const [task, setTask] = useState<Task | null>(null);
   const [sshKey, setSshKey] = useState<string>("");
@@ -27,7 +29,7 @@ const TaskDetails: React.FC = () => {
       .catch(console.error);
   };
 
-  if (!task) return <Typography>Loading...</Typography>;
+  if (!task) return <Typography>{t("loading")}</Typography>;
 
   return (
     <Box sx={{ p: 4 }}>
@@ -39,12 +41,12 @@ const TaskDetails: React.FC = () => {
         variant="outlined"
         sx={{ color: "#00ff88", borderColor: "#00ff88" }}
       >
-        Start Task
+        {t("taskDetails.startTask")}
       </Button>
 
       {sshKey && (
         <Box sx={{ mt: 3 }}>
-          <Typography>SSH Key:</Typography>
+          <Typography>{t("taskDetails.sshKey")}:</Typography>
           <Box
             sx={{
               bgcolor: "#111",

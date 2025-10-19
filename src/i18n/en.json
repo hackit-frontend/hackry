@@ -1,0 +1,56 @@
+{
+  "title": "Available Tasks",
+  "searchPlaceholder": "Search tasks...",
+  "difficulty": "Difficulty",
+  "all": "All",
+  "easy": "Easy",
+  "medium": "Medium",
+  "hard": "Hard",
+  "footerText": "Level up your hacking skills",
+  "loginWithGoogle": "Login with Google",
+  "loginLine1": "Welcome to Hackry — a platform for ethical hackers.",
+  "loginLine2": "Solve real-world cybersecurity challenges.",
+  "loginLine3": "Sharpen your skills. Climb the leaderboard. Rule the grid.",
+  "errorLoadingTasks": "Error: Failed to load tasks",
+  "navHome": "Home",
+  "navDashboard": "Dashboard",
+  "navLogout": "Logout",
+  "task": {
+    "difficulty": "Difficulty",
+    "viewTask": "View Task"
+
+},
+
+  "loadingUser": "Loading user...",
+  "profile": {
+    "title": "Profile",
+    "userInfo": "User Info",
+    "name": "Name",
+    "email": "Email",
+    "stats": "Stats",
+    "completedTasks": "Completed Tasks",
+    "rank": "Rank",
+    "loadingStats": "Loading stats..."
+  },
+
+  
+  "notFound": {
+    "error": "Error: Page Not Found",
+    "description": "The system couldn't locate the requested resource.\nPlease check the URL or return to the dashboard.",
+    "returnHome": "Return Home"
+  },
+
+  
+  "loading": "Loading...",
+  "taskDetails": {
+    "startTask": "Start Task",
+    "sshKey": "SSH Key"
+  }
+
+
+
+
+
+
+
+}

@@ -2,9 +2,11 @@ import { Button, Box, Typography } from "@mui/material";
 import { auth, provider, signInWithPopup } from "../auth/firebase";
 import { Google } from "@mui/icons-material";
 import { Typewriter } from "react-simple-typewriter";
-
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
+  const { t } = useTranslation();
+
   const handleGoogleLogin = async () => {
     try {
       await signInWithPopup(auth, provider);
@@ -27,8 +29,9 @@ const Login = () => {
       }}
     >
       <Typography variant="h3" sx={{ mb: 3 }}>
-        Hackry
+        HackLab
       </Typography>
+
       <Button
         variant="outlined"
         onClick={handleGoogleLogin}
@@ -39,9 +42,8 @@ const Login = () => {
         }}
         startIcon={<Google />}
       >
-        Login with Google
+        {t("loginWithGoogle")}
       </Button>
-
 
       <Typography
         variant="body1"
@@ -57,11 +59,10 @@ const Login = () => {
       >
         <Typewriter
           words={[
-            "Welcome to Hackry — a platform for ethical hackers.",
-            "Solve real-world cybersecurity challenges.",
-            "Sharpen your skills. Climb the leaderboard. Rule the grid.",
+            t("loginLine1"),
+            t("loginLine2"),
+            t("loginLine3"),
           ]}
-          
           loop={0}
           cursor
           cursorStyle="_"
@@ -70,7 +71,6 @@ const Login = () => {
           delaySpeed={2000}
         />
       </Typography>
-
     </Box>
   );
 };

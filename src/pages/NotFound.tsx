@@ -1,9 +1,11 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -23,11 +25,10 @@ const NotFound: React.FC = () => {
         404
       </Typography>
       <Typography variant="h5" sx={{ mb: 4 }}>
-        Error: Page Not Found
+        {t("notFound.error")}
       </Typography>
       <Typography variant="body1" sx={{ mb: 4, maxWidth: 500 }}>
-        The system couldn't locate the requested resource.
-        <br /> Please check the URL or return to the dashboard.
+        {t("notFound.description")}
       </Typography>
 
       <Button
@@ -39,7 +40,7 @@ const NotFound: React.FC = () => {
           "&:hover": { bgcolor: "#00ff8844" },
         }}
       >
-        Return Home
+        {t("notFound.returnHome")}
       </Button>
     </Box>
   );

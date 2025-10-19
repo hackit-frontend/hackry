@@ -3,7 +3,9 @@ import { Box } from "@mui/material";
 import Profile from "./Profile";
 import Progress from "./Progress";
 
+
 const Dashboard: React.FC = () => {
+  
   return (
     <Box
       sx={{

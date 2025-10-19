@@ -1,0 +1,57 @@
+{
+  "title": "Mavjud vazifalar",
+  "searchPlaceholder": "Vazifalarni qidiring...",
+  "difficulty": "Qiyinchilik darajasi",
+  "all": "Barchasi",
+  "easy": "Oson",
+  "medium": "O‘rta",
+  "hard": "Qiyin",
+  "footerText": "Xakerlik ko‘nikmalaringizni oshiring",
+  "loginWithGoogle": "Google orqali tizimga kiring",
+  "loginLine1": "Hackry platformasiga xush kelibsiz — bu axloqiy xakerlar uchun maydon.",
+  "loginLine2": "Haqiqiy kiberxavfsizlik muammolarini hal qiling.",
+  "loginLine3": "Ko‘nikmalaringizni oshiring. Reytingda yuqoriga chiqing. Tizimni zabt eting.",
+  "navHome": "Bosh sahifa",
+  "navDashboard": "Boshqaruv paneli",
+  "navLogout": "Chiqish",
+  "errorLoadingTasks": "Xatolik: Vazifalarni yuklab bo‘lmadi",
+  "task": {
+    "difficulty": "Qiyinlik darajasi",
+    "viewTask": "Vazifani ko‘rish"
+  },
+
+  "loadingUser": "Foydalanuvchi yuklanmoqda...",
+  "profile": {
+    "title": "Profil",
+    "userInfo": "Foydalanuvchi ma'lumotlari",
+    "name": "Ism",
+    "email": "Elektron pochta",
+    "stats": "Statistika",
+    "completedTasks": "Bajarilgan vazifalar",
+    "rank": "Daraja",
+    "loadingStats": "Statistika yuklanmoqda..."
+  },
+
+  
+  "notFound": {
+    "error": "Xato: Sahifa topilmadi",
+    "description": "Tizim so‘ralgan resursni topa olmadi.\nIltimos, URL manzilni tekshiring yoki boshqaruv paneliga qayting.",
+    "returnHome": "Bosh sahifaga qaytish"
+  },
+
+  
+  "loading": "Yuklanmoqda...",
+  "taskDetails": {
+    "startTask": "Vazifani boshlash",
+    "sshKey": "SSH kaliti"
+  }
+
+
+
+
+
+
+
+
+
+}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { auth } from "../../auth/firebase";
 
 interface UserStats {
@@ -8,6 +9,7 @@ interface UserStats {
 }
 
 const Profile: React.FC = () => {
+  const { t } = useTranslation();
   const user = auth.currentUser;
   const [stats, setStats] = useState<UserStats | null>(null);
 
@@ -20,32 +22,42 @@ const Profile: React.FC = () => {
     }
   }, [user]);
 
-  if (!user) return <Typography>Loading user...</Typography>;
+  if (!user) return <Typography>{t("loadingUser")}</Typography>;
 
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        Profile
+        {t("profile.title")}
       </Typography>
 
       <Card sx={{ maxWidth: 400, mb: 2 }}>
         <CardContent>
-          <Typography variant="h6">User Info</Typography>
-          <Typography>Name: {user.displayName}</Typography>
-          <Typography>Email: {user.email}</Typography>
+          <Typography variant="h6">{t("profile.userInfo")}</Typography>
+          <Typography>
+            {t("profile.name")}: {user.displayName}
+          </Typography>
+          <Typography>
+            {t("profile.email")}: {user.email}
+          </Typography>
         </CardContent>
       </Card>
 
       <Card sx={{ maxWidth: 400 }}>
         <CardContent>
-          <Typography variant="h6">Stats</Typography>
+          <Typography variant="h6">{t("profile.stats")}</Typography>
           {stats ? (
             <>
-              <Typography>Completed Tasks: {stats.completedTasks}</Typography>
-              <Typography>Rank: {stats.rank}</Typography>
+              <Typography>
+                {t("profile.completedTasks")}: {stats.completedTasks}
+              </Typography>
+              <Typography>
+                {t("profile.rank")}: {stats.rank}
+              </Typography>
             </>
           ) : (
-            <Typography color="text.secondary">Loading stats...</Typography>
+            <Typography color="text.secondary">
+              {t("profile.loadingStats")}
+            </Typography>
           )}
         </CardContent>
       </Card>

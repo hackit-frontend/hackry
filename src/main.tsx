@@ -7,7 +7,7 @@ import theme from "./theme";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "@fontsource/fira-code/400.css";
 import "@fontsource/fira-code/500.css";
-
+import "./i18n"; 
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
