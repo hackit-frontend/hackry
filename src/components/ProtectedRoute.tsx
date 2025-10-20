@@ -15,7 +15,6 @@ const ProtectedRoute = ({ children }: Props) => {
     return <Navigate to="/login" replace />;
   }
 
-  // User is authenticated, render the protected component
   return <>{children}</>;
 };
 
