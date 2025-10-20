@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, LinearProgress } from "@mui/material";
-import { auth } from "../../auth/firebase";
 
 interface UserProgress {
   completedTasks: number;
@@ -8,22 +7,41 @@ interface UserProgress {
 }
 
 const Progress: React.FC = () => {
-  const user = auth.currentUser;
   const [progress, setProgress] = useState<UserProgress | null>(null);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    if (user) {
-      fetch(`http://localhost:5000/api/users/${user.uid}/progress`)
-        .then((res) => res.json())
-        .then((data) => setProgress(data))
-        .catch(console.error);
-    }
-  }, [user]);
+    if (!token) return;
 
-  if (!user) return <Typography>Loading user...</Typography>;
+    const fetchProgress = async () => {
+      try {
+        const [tasksRes, completedRes] = await Promise.all([
+          fetch("http://backend.hacklab.uz:8000/tasks", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch("http://backend.hacklab.uz:8000/me/completed", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
 
-  const percentage =
-    progress ? (progress.completedTasks / progress.totalTasks) * 100 : 0;
+        const tasks = await tasksRes.json();
+        const completed = await completedRes.json();
+
+        setProgress({
+          totalTasks: tasks.length,
+          completedTasks: completed.length,
+        });
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchProgress();
+  }, [token]);
+
+  if (!token) return <Typography>Please login to see progress</Typography>;
+
+  const percentage = progress ? (progress.completedTasks / progress.totalTasks) * 100 : 0;
 
   return (
     <Box sx={{ p: 4 }}>

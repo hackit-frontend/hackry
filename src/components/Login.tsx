@@ -1,19 +1,35 @@
+import { useEffect } from "react";
 import { Button, Box, Typography } from "@mui/material";
-import { auth, provider, signInWithPopup } from "../auth/firebase";
 import { Google } from "@mui/icons-material";
 import { Typewriter } from "react-simple-typewriter";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
-  const handleGoogleLogin = async () => {
-    try {
-      await signInWithPopup(auth, provider);
-    } catch (error) {
-      console.error("Login failed:", error);
-    }
+  const handleLogin = () => {
+    // Redirect user to backend login endpoint
+    window.location.href = "http://backend.hacklab.uz:8000/auth/login";
   };
+
+  useEffect(() => {
+    // Check if token exists in URL after redirect
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) {
+      // Save token to localStorage
+      localStorage.setItem("authToken", token);
+
+      // Remove token from URL without reloading
+      const url = window.location.origin + window.location.pathname;
+      window.history.replaceState({}, document.title, url);
+
+      // Redirect to dashboard
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   return (
     <Box
@@ -34,7 +50,7 @@ const Login = () => {
 
       <Button
         variant="outlined"
-        onClick={handleGoogleLogin}
+        onClick={handleLogin}
         sx={{
           color: "#00ff88",
           borderColor: "#00ff88",
@@ -58,11 +74,7 @@ const Login = () => {
         }}
       >
         <Typewriter
-          words={[
-            t("loginLine1"),
-            t("loginLine2"),
-            t("loginLine3"),
-          ]}
+          words={[t("loginLine1"), t("loginLine2"), t("loginLine3")]}
           loop={0}
           cursor
           cursorStyle="_"

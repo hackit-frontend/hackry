@@ -1,63 +1,63 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent } from "@mui/material";
-import { useTranslation } from "react-i18next";
-import { auth } from "../../auth/firebase";
 
 interface UserStats {
   completedTasks: number;
   rank: string;
+  name: string;
+  email: string;
 }
 
 const Profile: React.FC = () => {
-  const { t } = useTranslation();
-  const user = auth.currentUser;
   const [stats, setStats] = useState<UserStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    if (user) {
-      fetch(`http://localhost:5000/api/users/${user.uid}/stats`)
-        .then((res) => res.json())
-        .then((data) => setStats(data))
-        .catch(console.error);
-    }
-  }, [user]);
+    if (!token) return;
 
-  if (!user) return <Typography>{t("loadingUser")}</Typography>;
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch("http://backend.hacklab.uz:8000/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch profile");
+        const data = await res.json();
+        setStats(data);
+      } catch (err) {
+        console.error(err);
+        setStats(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, [token]);
+
+  if (!token) return <Typography>Please login to see your profile</Typography>;
 
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" sx={{ mb: 3 }}>
-        {t("profile.title")}
+        Profile
       </Typography>
 
       <Card sx={{ maxWidth: 400, mb: 2 }}>
         <CardContent>
-          <Typography variant="h6">{t("profile.userInfo")}</Typography>
-          <Typography>
-            {t("profile.name")}: {user.displayName}
-          </Typography>
-          <Typography>
-            {t("profile.email")}: {user.email}
-          </Typography>
-        </CardContent>
-      </Card>
-
-      <Card sx={{ maxWidth: 400 }}>
-        <CardContent>
-          <Typography variant="h6">{t("profile.stats")}</Typography>
-          {stats ? (
+          {loading ? (
+            <Typography color="text.secondary">Loading profile...</Typography>
+          ) : stats ? (
             <>
-              <Typography>
-                {t("profile.completedTasks")}: {stats.completedTasks}
-              </Typography>
-              <Typography>
-                {t("profile.rank")}: {stats.rank}
-              </Typography>
+              <Typography variant="h6">User Info</Typography>
+              <Typography>Name: {stats.name}</Typography>
+              <Typography>Email: {stats.email}</Typography>
+              <Typography>Completed Tasks: {stats.completedTasks}</Typography>
+              <Typography>Rank: {stats.rank}</Typography>
             </>
           ) : (
-            <Typography color="text.secondary">
-              {t("profile.loadingStats")}
-            </Typography>
+            <Typography color="error">Failed to load profile</Typography>
           )}
         </CardContent>
       </Card>

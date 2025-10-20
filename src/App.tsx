@@ -1,66 +1,111 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { auth } from "./auth/firebase";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Box, CircularProgress, Typography } from "@mui/material";
+
 import Home from "./pages/ Home";
 import Login from "./components/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import TaskDetails from "./pages/TaskDetails";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 import AdminPanel from "./pages/AdminPanel";
 import NotFound from "./pages/NotFound";
-import type { User } from "firebase/auth";
-import { Box, CircularProgress, Typography } from "@mui/material";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import ProtectedRoute from "./components/ProtectedRoute";
 
-
-const ADMIN_EMAIL = "ludlowbecker@gmail.com"; // 👈 replace with your real Google account email
+const ADMIN_EMAIL = "ludlowbecker@gmail.com";
 
 const App = () => {
-  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [token, setToken] = useState<string | null>(null);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (u) => {
-      setUser(u);
-      setLoading(false);
-    });
-    return () => unsubscribe();
+    const authToken = localStorage.getItem("authToken");
+    if (authToken) {
+      setToken(authToken);
+
+      try {
+        // If JWT, decode payload
+        const payload = JSON.parse(atob(authToken.split(".")[1]));
+        setUserEmail(payload.email);
+      } catch (err) {
+        console.error("Failed to parse token:", err);
+      }
+    }
+    setLoading(false);
   }, []);
 
+  const isAdmin = userEmail === ADMIN_EMAIL;
 
-if (loading) 
-return (
-    <Box
-      sx={{
-        height: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        bgcolor: "#000",
-      }}
-    >
-      <CircularProgress sx={{ color: "#00ff88", mb: 2 }} />
-      <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code", fontSize: "1.2rem" }}>
-        Booting Hackry...
-      </Typography>
-    </Box>
-  );  if (!user) return <Login />;
-
-  const isAdmin = user.email === ADMIN_EMAIL; // isaAdmin will be confirmed by backend
+  if (loading)
+    return (
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: "#000",
+        }}
+      >
+        <CircularProgress sx={{ color: "#00ff88", mb: 2 }} />
+        <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code", fontSize: "1.2rem" }}>
+          Booting HackLab...
+        </Typography>
+      </Box>
+    );
 
   return (
     <Router>
-      <Navbar user={user} onLogout={() => signOut(auth)} />
+      {/* Show Navbar only if logged in */}
+      {token && <Navbar
+        userEmail={userEmail}
+        onLogout={() => {
+          localStorage.removeItem("authToken");
+          window.location.href = "/login"; 
+        }}
+      />}
+
       <Routes>
+        {/* Public routes */}
+        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/task/:id" element={<TaskDetails />} />
-        {isAdmin && <Route path="/admin" element={<AdminPanel />} />} {/* 🔐 Protected */}
+
+        {/* Protected routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute token={token}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/task/:id"
+          element={
+            <ProtectedRoute token={token}>
+              <TaskDetails />
+            </ProtectedRoute>
+          }
+        />
+        {isAdmin && (
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute token={token}>
+                <AdminPanel />
+              </ProtectedRoute>
+            }
+          />
+        )}
+
+        {/* Fallback for unknown routes */}
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
+
+      {/* Show Footer only if logged in */}
+      {token && <Footer />}
     </Router>
   );
 };

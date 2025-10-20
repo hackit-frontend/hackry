@@ -2,14 +2,13 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import type { User } from "firebase/auth";
 
 interface Props {
-  user: User;
+  userEmail?: string | null; 
   onLogout: () => void;
 }
 
-const Navbar: React.FC<Props> = ({ onLogout }) => {
+const Navbar: React.FC<Props> = ({ userEmail, onLogout }) => {
   const { t, i18n } = useTranslation();
 
   const toggleLanguage = () => {
@@ -42,7 +41,15 @@ const Navbar: React.FC<Props> = ({ onLogout }) => {
         <Button component={Link} to="/dashboard" sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
           {t("navDashboard")}
         </Button>
-        <Button onClick={onLogout} sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
+
+        {/* Display email if available */}
+        {userEmail && (
+          <Typography sx={{ ml: 2, color: "#00ff88", fontFamily: "Fira Code" }}>
+            {userEmail}
+          </Typography>
+        )}
+
+        <Button onClick={onLogout} sx={{ ml: 2, color: "#00ff88", fontFamily: "Fira Code" }}>
           {t("navLogout")}
         </Button>
 
