@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
 
-import Home from "./pages/ Home";
+// import Home from "./pages/ Home";
 import Login from "./components/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import TaskDetails from "./pages/TaskDetails";
