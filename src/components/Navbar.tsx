@@ -5,10 +5,11 @@ import { useTranslation } from "react-i18next";
 
 interface Props {
   userEmail?: string | null;
+  token?: string | null;
   onLogout: () => void;
 }
 
-const Navbar: React.FC<Props> = ({ userEmail, onLogout }) => {
+const Navbar: React.FC<Props> = ({ userEmail, token, onLogout }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -48,12 +49,14 @@ const Navbar: React.FC<Props> = ({ userEmail, onLogout }) => {
             {t("navDashboard")}
           </Button>
 
-          {/* Show user email if logged in */}
-          {userEmail ? (
+          {/* User Section */}
+          {token ? (
             <>
-              <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
-                {userEmail}
-              </Typography>
+              {userEmail && (
+                <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
+                  {userEmail}
+                </Typography>
+              )}
               <Button
                 onClick={onLogout}
                 sx={{
@@ -73,7 +76,6 @@ const Navbar: React.FC<Props> = ({ userEmail, onLogout }) => {
               sx={{
                 color: "#00ff88",
                 fontFamily: "Fira Code",
-                // border: "1px solid #00ff88",
                 borderRadius: "8px",
                 "&:hover": { bgcolor: "#00ff8844" },
               }}

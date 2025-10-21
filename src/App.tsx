@@ -1,120 +1,110 @@
-import { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { Box, CircularProgress, Typography } from "@mui/material";
-import { fetchSSHKey } from "./services/api";
-
-
-import Home from "./pages/ Home";
-import Login from "./components/Login";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import TaskDetails from "./pages/TaskDetails";
-import AdminPanel from "./pages/AdminPanel";
-import NotFound from "./pages/NotFound";
+import React, { useEffect, useState } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Box, CircularProgress } from "@mui/material";
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import ProtectedRoute from "./components/ProtectedRoute";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Login from "./components/Login";
+import Callback from "./pages/Callback";
 
-const ADMIN_EMAIL = "ludlowbecker@gmail.com";
+const App: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
 
-const App = () => {
-  const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState<string | null>(null);
-  const [userEmail, setUserEmail] = useState<string | null>(null);
-const [sshKey, setSshKey] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(localStorage.getItem("authToken"));
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [sshKey, setSshKey] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(true);
 
-useEffect(() => {
-  const authToken = localStorage.getItem("authToken");
-  if (authToken) {
-    setToken(authToken);
+  // Handle login redirect callback with token in URL
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const success = params.get("success");
+    const tokenFromUrl = params.get("token");
 
-    try {
-      const payload = JSON.parse(atob(authToken.split(".")[1]));
-      setUserEmail(payload.email);
-    } catch (err) {
-      console.error("Failed to parse token:", err);
+    if (success === "true" && tokenFromUrl) {
+      localStorage.setItem("authToken", tokenFromUrl);
+      setToken(tokenFromUrl);
+      navigate("/dashboard", { replace: true });
+    } else {
+      setLoading(false);
     }
+  }, [location, navigate]);
 
-    // Fetch SSH key
-    fetchSSHKey(authToken).then((key) => {
-      if (key) setSshKey(key);
-    });
-  }
-  setLoading(false);
-}, []);
+  // Fetch user info if token exists
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (!token) {
+        setLoading(false);
+        return;
+      }
 
+      try {
+        // Fetch /me (get user info)
+        const res = await fetch("http://backend.hacklab.uz:8000/me", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-  const isAdmin = userEmail === ADMIN_EMAIL;
+        if (!res.ok) throw new Error("Failed to fetch user info");
 
-  if (loading)
+        const data = await res.json();
+        setUserEmail(data.email || "");
+
+        // Fetch SSH key
+        const sshRes = await fetch("http://backend.hacklab.uz:8000/me/ssh/public", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (sshRes.ok) {
+          const sshData = await sshRes.json();
+          setSshKey(sshData.public_key || "");
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        localStorage.removeItem("authToken");
+        setToken(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [token]);
+
+  if (loading) {
     return (
-      <Box
-        sx={{
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          bgcolor: "#000",
-        }}
-      >
-        <CircularProgress sx={{ color: "#00ff88", mb: 2 }} />
-        <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code", fontSize: "1.2rem" }}>
-          Booting HackLab...
-        </Typography>
+      <Box sx={{ display: "flex", justifyContent: "center", mt: 10 }}>
+        <CircularProgress />
       </Box>
     );
+  }
 
   return (
-    <Router>
+    <>
+      {/* Navbar is always visible */}
       <Navbar
         userEmail={userEmail}
+        token={token}
         onLogout={() => {
           localStorage.removeItem("authToken");
-          window.location.href = "/login";
+          setToken(null);
+          setUserEmail("");
+          setSshKey("");
+          navigate("/login");
         }}
       />
 
-
+      {/* Routes */}
       <Routes>
-        {/* Public routes */}
-        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/" element={<Home />} />
-
-        {/* Protected routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute token={token}>
-              <Dashboard sshKey={sshKey} />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/task/:id"
-          element={
-            <ProtectedRoute token={token}>
-              <TaskDetails />
-            </ProtectedRoute>
-          }
-        />
-        {isAdmin && (
-          <Route
-            path="/admin"
-            element={
-              <ProtectedRoute token={token}>
-                <AdminPanel />
-              </ProtectedRoute>
-            }
-          />
-        )}
-
-        {/* Fallback for unknown routes */}
-        <Route path="*" element={<NotFound />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/callback" element={<Callback />} />
+        <Route path="/dashboard" element={<Dashboard sshKey={sshKey} />} />
+        <Route path="*" element={<Dashboard sshKey={sshKey} />} />
       </Routes>
-
-      {/* Show Footer only if logged in */}
-      {<Footer />}
-    </Router>
+    </>
   );
 };
 
