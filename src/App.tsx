@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
+import { fetchSSHKey } from "./services/api";
 
-// import Home from "./pages/ Home";
+
+import Home from "./pages/ Home";
 import Login from "./components/Login";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import TaskDetails from "./pages/TaskDetails";
@@ -18,22 +20,28 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
+const [sshKey, setSshKey] = useState<string | null>(null);
 
-  useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
-    if (authToken) {
-      setToken(authToken);
+useEffect(() => {
+  const authToken = localStorage.getItem("authToken");
+  if (authToken) {
+    setToken(authToken);
 
-      try {
-        // If JWT, decode payload
-        const payload = JSON.parse(atob(authToken.split(".")[1]));
-        setUserEmail(payload.email);
-      } catch (err) {
-        console.error("Failed to parse token:", err);
-      }
+    try {
+      const payload = JSON.parse(atob(authToken.split(".")[1]));
+      setUserEmail(payload.email);
+    } catch (err) {
+      console.error("Failed to parse token:", err);
     }
-    setLoading(false);
-  }, []);
+
+    // Fetch SSH key
+    fetchSSHKey(authToken).then((key) => {
+      if (key) setSshKey(key);
+    });
+  }
+  setLoading(false);
+}, []);
+
 
   const isAdmin = userEmail === ADMIN_EMAIL;
 
@@ -58,26 +66,26 @@ const App = () => {
 
   return (
     <Router>
-      {/* Show Navbar only if logged in */}
-      {token && <Navbar
+      <Navbar
         userEmail={userEmail}
         onLogout={() => {
           localStorage.removeItem("authToken");
-          window.location.href = "/login"; 
+          window.location.href = "/login";
         }}
-      />}
+      />
+
 
       <Routes>
         {/* Public routes */}
-        <Route path="/login" element={token ? <Navigate to="/home" /> : <Login />} />
-        <Route path="/" element={<Login />} />
+        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
+        <Route path="/" element={<Home />} />
 
         {/* Protected routes */}
         <Route
           path="/dashboard"
           element={
             <ProtectedRoute token={token}>
-              <Dashboard />
+              <Dashboard sshKey={sshKey} />
             </ProtectedRoute>
           }
         />
@@ -105,7 +113,7 @@ const App = () => {
       </Routes>
 
       {/* Show Footer only if logged in */}
-      {token && <Footer />}
+      {<Footer />}
     </Router>
   );
 };
