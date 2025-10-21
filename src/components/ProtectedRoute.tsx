@@ -11,7 +11,6 @@ const ProtectedRoute = ({ children }: Props) => {
   console.log("ProtectedRoute token:", token);
 
   if (!token) {
-    // User is not authenticated, redirect to login
     return <Navigate to="/login" replace />;
   }
 

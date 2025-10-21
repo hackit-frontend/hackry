@@ -69,8 +69,8 @@ const App = () => {
 
       <Routes>
         {/* Public routes */}
-        <Route path="/login" element={token ? <Navigate to="/dashboard" /> : <Login />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/login" element={token ? <Navigate to="/home" /> : <Login />} />
+        <Route path="/" element={<Login />} />
 
         {/* Protected routes */}
         <Route

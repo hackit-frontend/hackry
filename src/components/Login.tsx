@@ -27,7 +27,7 @@ const Login = () => {
       window.history.replaceState({}, document.title, url);
 
       // Redirect to dashboard
-      navigate("/dashboard");
+      navigate("/home");
     }
   }, [navigate]);
 
