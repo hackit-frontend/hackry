@@ -37,7 +37,11 @@ const App: React.FC = () => {
 
       try { // Fetch SSH key
         const sshRes = await fetch("https://backend.hacklab.uz/me/ssh/public", {
-          credentials: "include",
+            method: 'GET',
+            credentials: 'include',  // Critical: Sends cookies cross-site
+            headers: {
+                'Content-Type': 'application/json',
+            },
         });
 
         console.log("SSH Key Response:", sshRes);
