@@ -28,7 +28,7 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/tasks")
+    fetch("https://backend.hacklab.uz/tasks")
       .then((res) => {
         if (!res.ok) {
           throw new Error("Internal Server Error");
