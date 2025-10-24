@@ -11,7 +11,7 @@ const Login = () => {
 
   const handleLogin = () => {
     // Redirect user to backend login endpoint
-    window.location.href = "http://backend.hacklab.uz:8000/auth/login";
+    window.location.href = "https://backend.hacklab.uz/auth/login";
   };
 
   useEffect(() => {

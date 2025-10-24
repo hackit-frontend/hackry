@@ -36,7 +36,7 @@ const App: React.FC = () => {
     const fetchUserData = async () => {
 
       try { // Fetch SSH key
-        const sshRes = await fetch("http://backend.hacklab.uz:8000/me/ssh/public", {
+        const sshRes = await fetch("https://backend.hacklab.uz/me/ssh/public", {
           credentials: "include",
         });
 
