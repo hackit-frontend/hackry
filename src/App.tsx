@@ -40,6 +40,7 @@ const App: React.FC = () => {
           credentials: "include",
         });
 
+        console.log("SSH Key Response:", sshRes);
         if (sshRes.ok) {
           const sshData = await sshRes.json();
           setSshKey(sshData.public_key || "");
