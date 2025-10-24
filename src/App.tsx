@@ -15,6 +15,7 @@ const App: React.FC = () => {
   const [sshKey, setSshKey] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
+
   // Handle login redirect callback with token in URL
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -33,29 +34,10 @@ const App: React.FC = () => {
   // Fetch user info if token exists
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!token) {
-        setLoading(false);
-        return;
-      }
 
-      try {
-        // Fetch /me (get user info)
-        const res = await fetch("http://backend.hacklab.uz:8000/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!res.ok) throw new Error("Failed to fetch user info");
-
-        const data = await res.json();
-        setUserEmail(data.email || "");
-
-        // Fetch SSH key
+      try { // Fetch SSH key
         const sshRes = await fetch("http://backend.hacklab.uz:8000/me/ssh/public", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          credentials: "include",
         });
 
         if (sshRes.ok) {
@@ -72,7 +54,7 @@ const App: React.FC = () => {
     };
 
     fetchUserData();
-  }, [token]);
+  }, []);
 
   if (loading) {
     return (
