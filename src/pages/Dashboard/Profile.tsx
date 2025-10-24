@@ -31,7 +31,7 @@ const Profile: React.FC<ProfileProps> = ({ sshKey }) => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
-        const res = await fetch("http://backend.hacklab.uz:8000/me", {
+        const res = await fetch("https://backend.hacklab.uz/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch profile");

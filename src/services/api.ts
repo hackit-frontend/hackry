@@ -1,5 +1,5 @@
 // src/services/api.ts
-export const API_BASE = "http://backend.hacklab.uz:8000";
+export const API_BASE = "https://backend.hacklab.uz";
 
 export async function fetchSSHKey(token: string): Promise<string | null> {
   try {
