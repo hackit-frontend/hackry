@@ -1,35 +1,15 @@
-import { useEffect } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
 import { Typewriter } from "react-simple-typewriter";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
   const handleLogin = () => {
     // Redirect user to backend login endpoint
     window.location.href = "https://backend.hacklab.uz/auth/login";
   };
-
-  useEffect(() => {
-    // Check if token exists in URL after redirect
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    if (token) {
-      // Save token to localStorage
-      localStorage.setItem("authToken", token);
-
-      // Remove token from URL without reloading
-      const url = window.location.origin + window.location.pathname;
-      window.history.replaceState({}, document.title, url);
-
-      // Redirect to dashboard
-      navigate("/dashboard");
-    }
-  }, [navigate]);
 
   return (
     <Box

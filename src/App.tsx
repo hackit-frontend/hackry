@@ -4,7 +4,6 @@ import { Box, CircularProgress } from "@mui/material";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./components/Login";
-import Callback from "./pages/Callback";
 import Home from "./pages/ Home";
 
 const App: React.FC = () => {
@@ -70,7 +69,6 @@ const App: React.FC = () => {
       {/* Routes */}
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/callback" element={<Callback />} />
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} />} />
         <Route path="/" element={<Home />} />
       </Routes>

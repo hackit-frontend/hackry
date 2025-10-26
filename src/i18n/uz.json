@@ -14,7 +14,7 @@
   "navHome": "Bosh sahifa",
   "navDashboard": "Boshqaruv paneli",
   "navLogout": "Chiqish",
-  "errorLoadingTasks": "Xatolik: Vazifalarni yuklab bo‘lmadi",
+  "errorLoadingTasks": "Vazifalarni ko‘rish uchun login qiling",
   "task": {
     "difficulty": "Qiyinlik darajasi",
     "viewTask": "Vazifani ko‘rish"
@@ -32,26 +32,15 @@
     "loadingStats": "Statistika yuklanmoqda..."
   },
 
-  
   "notFound": {
     "error": "Xato: Sahifa topilmadi",
     "description": "Tizim so‘ralgan resursni topa olmadi.\nIltimos, URL manzilni tekshiring yoki boshqaruv paneliga qayting.",
     "returnHome": "Bosh sahifaga qaytish"
   },
 
-  
   "loading": "Yuklanmoqda...",
   "taskDetails": {
     "startTask": "Vazifani boshlash",
     "sshKey": "SSH kaliti"
   }
-
-
-
-
-
-
-
-
-
 }
