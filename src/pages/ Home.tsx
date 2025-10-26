@@ -28,7 +28,13 @@ const Home: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch("https://backend.hacklab.uz/tasks")
+    fetch("https://backend.hacklab.uz/tasks", {
+        method: 'GET',
+        credentials: 'include',  // Critical: Sends cookies cross-site
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
       .then((res) => {
         if (!res.ok) {
           throw new Error("Internal Server Error");

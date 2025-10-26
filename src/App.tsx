@@ -5,31 +5,15 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./components/Login";
 import Callback from "./pages/Callback";
+import Home from "./pages/ Home";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const [token, setToken] = useState<string | null>(localStorage.getItem("authToken"));
   const [userEmail, setUserEmail] = useState<string>("");
   const [sshKey, setSshKey] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
-
-
-  // Handle login redirect callback with token in URL
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const success = params.get("success");
-    const tokenFromUrl = params.get("token");
-
-    if (success === "true" && tokenFromUrl) {
-      localStorage.setItem("authToken", tokenFromUrl);
-      setToken(tokenFromUrl);
-      navigate("/dashboard", { replace: true });
-    } else {
-      setLoading(false);
-    }
-  }, [location, navigate]);
 
   // Fetch user info if token exists
   useEffect(() => {
@@ -89,7 +73,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/callback" element={<Callback />} />
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} />} />
-        <Route path="*" element={<Dashboard sshKey={sshKey} />} />
+        <Route path="/home" element={<Home />} />
       </Routes>
     </>
   );
