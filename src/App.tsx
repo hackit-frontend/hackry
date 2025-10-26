@@ -60,7 +60,6 @@ const App: React.FC = () => {
         userEmail={userEmail}
         token={token}
         onLogout={() => {
-          localStorage.removeItem("authToken");
           setToken(null);
           setUserEmail("");
           setSshKey("");
@@ -73,7 +72,7 @@ const App: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/callback" element={<Callback />} />
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Home />} />
       </Routes>
     </>
   );
