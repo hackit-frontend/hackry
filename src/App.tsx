@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
