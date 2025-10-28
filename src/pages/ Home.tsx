@@ -8,9 +8,13 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Dialog,
+  DialogContent,
+  CircularProgress,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import TaskCard from "../components/TaskCard";
+import TaskDetails from "./TaskDetails";
 
 interface Task {
   id: string;
@@ -27,30 +31,29 @@ const Home: React.FC = () => {
   const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [error, setError] = useState<string | null>(null);
 
+  // Modal handling
+  const [open, setOpen] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+
   useEffect(() => {
     fetch("https://backend.hacklab.uz/tasks", {
-        method: 'GET',
-        credentials: 'include',  // Critical: Sends cookies cross-site
-        headers: {
-            'Content-Type': 'application/json',
-        },
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
-        if (!res.ok) {
-          throw new Error("Internal Server Error");
-        }
+        if (!res.ok) throw new Error("Internal Server Error");
         return res.json();
       })
       .then((data) => {
         setTasks(data);
         setFilteredTasks(data);
       })
-      .catch(() => {
-        setError(t("errorLoadingTasks"));
-      });
+      .catch(() => setError(t("errorLoadingTasks")));
   }, [t]);
 
-  // Filter logic
   useEffect(() => {
     let filtered = tasks.filter(
       (task) =>
@@ -68,9 +71,19 @@ const Home: React.FC = () => {
     setFilteredTasks(filtered);
   }, [search, tasks, difficultyFilter]);
 
+  const handleOpenDetails = (id: string) => {
+    setSelectedTaskId(id);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedTaskId(null);
+  };
+
   return (
     <Box sx={{ p: 4 }}>
-      {/* Header with Search and Filter */}
+      {/* Header */}
       <Box
         sx={{
           display: "flex",
@@ -84,7 +97,6 @@ const Home: React.FC = () => {
         <Typography variant="h4">{t("title")}</Typography>
 
         <Box sx={{ display: "flex", gap: 2 }}>
-          {/* Difficulty Filter */}
           <FormControl size="small" sx={{ minWidth: 150 }}>
             <InputLabel>{t("difficulty")}</InputLabel>
             <Select
@@ -109,7 +121,6 @@ const Home: React.FC = () => {
             </Select>
           </FormControl>
 
-          {/* Search Field */}
           <TextField
             placeholder={t("searchPlaceholder")}
             variant="outlined"
@@ -124,7 +135,6 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Error Alert */}
       {error && (
         <Alert
           severity="error"
@@ -134,15 +144,12 @@ const Home: React.FC = () => {
             fontFamily: "Fira Code",
             backgroundColor: "#2b0000",
             color: "#ff8888",
-            position: "absolute",
-            bottom: "60px",
           }}
         >
           {error}
         </Alert>
       )}
 
-      {/* Tasks Grid */}
       {!error && (
         <Box
           sx={{
@@ -152,10 +159,21 @@ const Home: React.FC = () => {
           }}
         >
           {filteredTasks.map((task) => (
-            <TaskCard key={task.id} task={task} />
+            <TaskCard key={task.id} task={task} onView={() => handleOpenDetails(task.id)} />
           ))}
         </Box>
       )}
+
+      {/* Task Details Modal */}
+      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+        <DialogContent sx={{ bgcolor: "#111", color: "#fff" }}>
+          {selectedTaskId ? (
+            <TaskDetails taskId={selectedTaskId} />
+          ) : (
+            <CircularProgress sx={{ color: "#00ff88", display: "block", mx: "auto", my: 4 }} />
+          )}
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };

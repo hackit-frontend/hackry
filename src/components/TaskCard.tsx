@@ -1,7 +1,6 @@
 import React from "react";
 import { Card, CardContent, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next"; // ✅ import i18n hook
+import { useTranslation } from "react-i18next";
 
 interface Task {
   id: string;
@@ -10,24 +9,33 @@ interface Task {
   description: string;
 }
 
-const TaskCard: React.FC<{ task: Task }> = ({ task }) => {
-  const { t } = useTranslation(); // ✅ use translation
+interface TaskCardProps {
+  task: Task;
+  onView: () => void;
+}
+
+const TaskCard: React.FC<TaskCardProps> = ({ task, onView }) => {
+  const { t } = useTranslation();
 
   return (
-    <Card sx={{ bgcolor: "background.paper" }}>
+    <Card sx={{ bgcolor: "#181818", color: "#fff", borderRadius: 2 }}>
       <CardContent>
         <Typography variant="h6">{task.title}</Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="#aaa">
           {task.description}
         </Typography>
         <Typography sx={{ mt: 1, color: "#00ff88" }}>
           {t("task.difficulty")}: {task.difficulty}
         </Typography>
         <Button
-          component={Link}
-          to={`/task/${task.id}`}
+          onClick={onView}
           variant="outlined"
-          sx={{ mt: 2, color: "#00ff88", borderColor: "#00ff88" }}
+          sx={{
+            mt: 2,
+            color: "#00ff88",
+            borderColor: "#00ff88",
+            "&:hover": { borderColor: "#00ffaa" },
+          }}
         >
           {t("task.viewTask")}
         </Button>
