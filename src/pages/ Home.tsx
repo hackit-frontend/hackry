@@ -81,37 +81,33 @@ const Home: React.FC = () => {
     setFilteredTasks(filtered);
   }, [search, tasks, difficultyFilter]);
 
-  // Fetch SSH Key after login
-  useEffect(() => {
-    const alreadyShown = sessionStorage.getItem("sshModalShown");
-    if (alreadyShown) return;
-
-    const fetchSshKey = async () => {
-      try {
-        setLoadingSsh(true);
-        const res = await fetch("https://backend.hacklab.uz/me/ssh/public", {
-          method: "GET",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-        });
-        console.log("SSH Key fetch response:", res);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.public_key) {
-            setSshKey(data.public_key);
-            setShowSshModal(true);
-            sessionStorage.setItem("sshModalShown", "true");
-          }
+useEffect(() => {
+  const fetchSshKey = async () => {
+    try {
+      setLoadingSsh(true);
+      const res = await fetch("https://backend.hacklab.uz/me/ssh/public", {
+        method: "GET",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      console.log("SSH Key fetch data:", data);
+      if (data.public_key) {
+        setSshKey(data.public_key);
+        if (!sessionStorage.getItem("sshModalShown")) {
+          setShowSshModal(true);
+          sessionStorage.setItem("sshModalShown", "true");
         }
-      } catch (err) {
-        console.error("Error fetching SSH key:", err);
-      } finally {
-        setLoadingSsh(false);
       }
-    };
+    } catch (err) {
+      console.error("Error fetching SSH key:", err);
+    } finally {
+      setLoadingSsh(false);
+    }
+  };
+  fetchSshKey();
+}, []);
 
-    fetchSshKey();
-  }, []);
 
   const handleDownloadSsh = () => {
     if (!sshKey) return;
