@@ -18,7 +18,13 @@ const TaskDetails: React.FC<Props> = ({ taskId }) => {
   const [sshKey, setSshKey] = useState<string>("");
 
   useEffect(() => {
-    fetch(`https://backend.hacklab.uz/tasks/${taskId}`)
+    fetch(`https://backend.hacklab.uz/tasks/${taskId}`, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
       .then((res) => res.json())
       .then(setTask)
       .catch(console.error);
