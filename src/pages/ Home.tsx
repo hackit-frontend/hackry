@@ -92,8 +92,12 @@ useEffect(() => {
       });
       const data = await res.json();
       console.log("SSH Key fetch data:", data);
-      if (data.public_key) {
-        setSshKey(data.public_key);
+
+      if (data.public_keys && Array.isArray(data.public_keys) && data.public_keys.length > 0) {
+        const key = data.public_keys[0].trim();
+        setSshKey(key);
+
+        // Show modal only once per session
         if (!sessionStorage.getItem("sshModalShown")) {
           setShowSshModal(true);
           sessionStorage.setItem("sshModalShown", "true");
@@ -105,6 +109,7 @@ useEffect(() => {
       setLoadingSsh(false);
     }
   };
+
   fetchSshKey();
 }, []);
 
