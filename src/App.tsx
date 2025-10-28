@@ -4,65 +4,53 @@ import { Box, CircularProgress } from "@mui/material";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Login from "./components/Login";
-import Home from "./pages/ Home"; // fixed space in import
+import Home from "./pages/ Home";
 
 const App: React.FC = () => {
   const navigate = useNavigate();
 
-  const [token, setToken] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [sshKey, setSshKey] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const checkAuthAndFetchKey = async () => {
       try {
-        // 1️⃣ Verify login status
-        const authCheck = await fetch("https://backend.hacklab.uz/me", {
+        const sshRes = await fetch("https://backend.hacklab.uz/me/ssh/public", {
           method: "GET",
-          credentials: "include", // ensures cookies are sent
+          credentials: "include", // send cookies cross-site
+          headers: { "Content-Type": "application/json" },
         });
 
-        if (authCheck.ok) {
-          // const authData = await authCheck.json();
-          setToken("true"); 
+        if (sshRes.ok) {
+          const sshData = await sshRes.json();
+          setIsAuthenticated(true);
+          setSshKey(sshData.public_key || "");
         } else {
-          setToken(null);
-        }
-
-        // 2️⃣ Fetch SSH public key (only if logged in)
-        if (authCheck.ok) {
-          const sshRes = await fetch("https://backend.hacklab.uz/me/ssh/public", {
-            method: "GET",
-            credentials: "include",
-            headers: { "Content-Type": "application/json" },
-          });
-
-          if (sshRes.ok) {
-            const sshData = await sshRes.json();
-            setSshKey(sshData.public_key || "");
-          }
+          setIsAuthenticated(false);
+          setSshKey("");
         }
       } catch (err) {
-        console.error("Error fetching user data:", err);
-        setToken(null);
+        console.error("Error checking authentication:", err);
+        setIsAuthenticated(false);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserData();
+    checkAuthAndFetchKey();
   }, []);
 
   const handleLogout = async () => {
     try {
       await fetch("https://backend.hacklab.uz/auth/logout", {
         method: "POST",
-        credentials: "include",
+        credentials: "include", // so the backend clears cookie
       });
     } catch (err) {
-      console.error("Error logging out:", err);
+      console.error("Logout error:", err);
     } finally {
-      setToken(null);
+      setIsAuthenticated(false);
       setSshKey("");
       navigate("/login");
     }
@@ -86,7 +74,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Navbar token={token} onLogout={handleLogout} />
+      <Navbar token={isAuthenticated ? "true" : null} onLogout={handleLogout} />
 
       <Routes>
         <Route path="/login" element={<Login />} />
