@@ -51,7 +51,7 @@ const App: React.FC = () => {
       </Box>
     );
   }
-
+// news 
   return (
     <>
       {/* Navbar is always visible */}
