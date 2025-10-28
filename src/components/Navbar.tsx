@@ -4,12 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 interface Props {
-  userEmail?: string | null;
   token?: string | null;
   onLogout: () => void;
 }
 
-const Navbar: React.FC<Props> = ({ userEmail, token, onLogout }) => {
+const Navbar: React.FC<Props> = ({ token, onLogout }) => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
 
@@ -24,7 +23,6 @@ const Navbar: React.FC<Props> = ({ userEmail, token, onLogout }) => {
   return (
     <AppBar position="static" sx={{ bgcolor: "black", boxShadow: "none" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-        {/* Left side: Logo */}
         <Typography
           variant="h5"
           component={Link}
@@ -39,7 +37,6 @@ const Navbar: React.FC<Props> = ({ userEmail, token, onLogout }) => {
           HackLab
         </Typography>
 
-        {/* Right side: Navigation + Actions */}
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           <Button
             component={Link}
@@ -49,27 +46,20 @@ const Navbar: React.FC<Props> = ({ userEmail, token, onLogout }) => {
             {t("navDashboard")}
           </Button>
 
-          {/* User Section */}
+          {/* Show Login or Logout */}
           {token ? (
-            <>
-              {userEmail && (
-                <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
-                  {userEmail}
-                </Typography>
-              )}
-              <Button
-                onClick={onLogout}
-                sx={{
-                  color: "#00ff88",
-                  fontFamily: "Fira Code",
-                  border: "1px solid #00ff88",
-                  borderRadius: "8px",
-                  "&:hover": { bgcolor: "#00ff8844" },
-                }}
-              >
-                {t("navLogout")}
-              </Button>
-            </>
+            <Button
+              onClick={onLogout}
+              sx={{
+                color: "#00ff88",
+                fontFamily: "Fira Code",
+                border: "1px solid #00ff88",
+                borderRadius: "8px",
+                "&:hover": { bgcolor: "#00ff8844" },
+              }}
+            >
+              {t("navLogout")}
+            </Button>
           ) : (
             <Button
               onClick={handleLogin}
@@ -84,7 +74,6 @@ const Navbar: React.FC<Props> = ({ userEmail, token, onLogout }) => {
             </Button>
           )}
 
-          {/* Language Toggle */}
           <Button
             onClick={toggleLanguage}
             sx={{
