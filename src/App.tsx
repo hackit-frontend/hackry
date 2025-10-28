@@ -23,8 +23,8 @@ const App: React.FC = () => {
         });
 
         if (authCheck.ok) {
-          const authData = await authCheck.json();
-          setToken("true"); // user authenticated (no need to store real token)
+          // const authData = await authCheck.json();
+          setToken("true"); 
         } else {
           setToken(null);
         }
