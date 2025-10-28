@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { Box, Typography, Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
@@ -12,41 +12,76 @@ interface Task {
 const TaskDetails: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const [task, setTask] = useState<Task | null>(null);
+  const location = useLocation();
+  const [task, setTask] = useState<Task | null>(
+    (location.state as { task?: Task })?.task || null
+  );
   const [sshKey, setSshKey] = useState<string>("");
 
+  // ✅ Fallback: If user refreshed and no state is available
   useEffect(() => {
-    fetch(`http://localhost:5000/api/tasks/${id}`)
-      .then((res) => res.json())
-      .then(setTask)
-      .catch(console.error);
-  }, [id]);
+    if (!task && id) {
+      fetch(`https://backend.hacklab.uz/tasks/${id}`)
+        .then((res) => {
+          if (!res.ok) throw new Error("Task not found");
+          return res.json();
+        })
+        .then((data) => setTask(data))
+        .catch((err) => console.error(err));
+    }
+  }, [id, task]);
 
   const handleStart = () => {
-    fetch(`http://localhost:5000/api/tasks/${id}/start`)
+    fetch(`https://backend.hacklab.uz/tasks/${id}/start`)
       .then((res) => res.json())
       .then((data) => setSshKey(data.sshKey))
       .catch(console.error);
   };
 
-  if (!task) return <Typography>{t("loading")}</Typography>;
+  if (!task) {
+    return (
+      <Typography sx={{ p: 4, fontFamily: "Fira Code", color: "#888" }}>
+        {t("loading")}
+      </Typography>
+    );
+  }
 
   return (
     <Box sx={{ p: 4 }}>
-      <Typography variant="h4">{task.title}</Typography>
-      <Typography sx={{ my: 2 }}>{task.description}</Typography>
+      <Typography
+        variant="h4"
+        sx={{ color: "#00ff88", fontFamily: "Fira Code", mb: 2 }}
+      >
+        {task.title}
+      </Typography>
+
+      <Typography
+        sx={{ color: "#ccc", fontFamily: "Fira Code", mb: 3, whiteSpace: "pre-line" }}
+      >
+        {task.description}
+      </Typography>
 
       <Button
         onClick={handleStart}
         variant="outlined"
-        sx={{ color: "#00ff88", borderColor: "#00ff88" }}
+        sx={{
+          color: "#00ff88",
+          borderColor: "#00ff88",
+          fontFamily: "Fira Code",
+          "&:hover": { borderColor: "#00ffaa", color: "#00ffaa" },
+        }}
       >
         {t("taskDetails.startTask")}
       </Button>
 
       {sshKey && (
         <Box sx={{ mt: 3 }}>
-          <Typography>{t("taskDetails.sshKey")}:</Typography>
+          <Typography
+            sx={{ color: "#00ffaa", fontFamily: "Fira Code", mb: 1 }}
+          >
+            {t("taskDetails.sshKey")}:
+          </Typography>
+
           <Box
             sx={{
               bgcolor: "#111",
