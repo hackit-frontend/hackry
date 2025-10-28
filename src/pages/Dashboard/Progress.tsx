@@ -6,23 +6,28 @@ interface UserProgress {
   totalTasks: number;
 }
 
-const Progress: React.FC = () => {
+interface ProgressProps {
+  isAuthenticated: boolean;
+}
+
+const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
   const [progress, setProgress] = useState<UserProgress | null>(null);
-  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    if (!token) return;
+    if (!isAuthenticated) return;
 
     const fetchProgress = async () => {
       try {
         const [tasksRes, completedRes] = await Promise.all([
-          fetch("http://backend.hacklab.uz:8000/tasks", {
-            headers: { Authorization: `Bearer ${token}` },
+          fetch("https://backend.hacklab.uz/tasks", {
+            credentials: "include",
           }),
-          fetch("http://backend.hacklab.uz:8000/me/completed", {
-            headers: { Authorization: `Bearer ${token}` },
+          fetch("https://backend.hacklab.uz/me/completed", {
+            credentials: "include",
           }),
         ]);
+
+        if (!tasksRes.ok || !completedRes.ok) return;
 
         const tasks = await tasksRes.json();
         const completed = await completedRes.json();
@@ -37,11 +42,18 @@ const Progress: React.FC = () => {
     };
 
     fetchProgress();
-  }, [token]);
+  }, [isAuthenticated]);
 
-  if (!token) return <Typography>Please login to see progress</Typography>;
+  if (!isAuthenticated)
+    return (
+      <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
+        Please login to see progress.
+      </Typography>
+    );
 
-  const percentage = progress ? (progress.completedTasks / progress.totalTasks) * 100 : 0;
+  const percentage = progress
+    ? (progress.completedTasks / progress.totalTasks) * 100
+    : 0;
 
   return (
     <Box sx={{ p: 4 }}>

@@ -5,9 +5,10 @@ import Progress from "./Progress";
 
 interface DashboardProps {
   sshKey?: string | null;
+  isAuthenticated: boolean;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ sshKey }) => {
+const Dashboard: React.FC<DashboardProps> = ({ sshKey, isAuthenticated }) => {
   return (
     <Box
       sx={{
@@ -19,12 +20,12 @@ const Dashboard: React.FC<DashboardProps> = ({ sshKey }) => {
     >
       {/* Profile Section */}
       <Box sx={{ flex: 1, minWidth: 300 }}>
-        <Profile sshKey={sshKey} />
+        <Profile sshKey={sshKey} isAuthenticated={isAuthenticated} />
       </Box>
 
       {/* Progress Section */}
       <Box sx={{ flex: 1, minWidth: 300 }}>
-        <Progress />
+        <Progress isAuthenticated={isAuthenticated} />
       </Box>
     </Box>
   );

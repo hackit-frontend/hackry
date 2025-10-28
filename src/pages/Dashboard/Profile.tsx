@@ -18,21 +18,22 @@ interface UserStats {
 
 interface ProfileProps {
   sshKey?: string | null;
+  isAuthenticated: boolean;
 }
 
-const Profile: React.FC<ProfileProps> = ({ sshKey }) => {
+const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    if (!token) return;
+    if (!isAuthenticated) return;
 
     const fetchProfile = async () => {
       try {
         setLoading(true);
-        const res = await fetch("https://backend.hacklab.uz/me", {
-          headers: { Authorization: `Bearer ${token}` },
+        const res = await fetch("https://backend.hacklab.uz/profile", {
+          method: "GET",
+          credentials: "include", // sends cookie
         });
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
@@ -46,7 +47,7 @@ const Profile: React.FC<ProfileProps> = ({ sshKey }) => {
     };
 
     fetchProfile();
-  }, [token]);
+  }, [isAuthenticated]);
 
   const handleCopy = () => {
     if (sshKey) {
@@ -55,7 +56,7 @@ const Profile: React.FC<ProfileProps> = ({ sshKey }) => {
     }
   };
 
-  if (!token)
+  if (!isAuthenticated)
     return (
       <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
         Please login to see your profile.
