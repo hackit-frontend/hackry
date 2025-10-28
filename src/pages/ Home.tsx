@@ -94,6 +94,7 @@ const Home: React.FC = () => {
           credentials: "include",
           headers: { "Content-Type": "application/json" },
         });
+        console.log("SSH Key fetch response:", res);
         if (res.ok) {
           const data = await res.json();
           if (data.public_key) {
