@@ -12,12 +12,12 @@ import {
   DialogContent,
   CircularProgress,
   Button,
-  Modal,
 } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import TaskCard from "../components/TaskCard";
 import TaskDetails from "./TaskDetails";
 import DownloadIcon from "@mui/icons-material/Download";
+import KeyIcon from "@mui/icons-material/VpnKey";
 
 interface Task {
   id: string;
@@ -31,99 +31,100 @@ const Home: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [search, setSearch] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
-  const [filteredTasks, setFilteredTasks] = useState<Task[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Modal handling for task details
+  // Task details modal
   const [open, setOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
-  // SSH key modal
-  const [sshKey, setSshKey] = useState<string | null>(null);
-  const [showSshModal, setShowSshModal] = useState<boolean>(false);
-  const [loadingSsh, setLoadingSsh] = useState<boolean>(false);
+  // SSH Key download state
+  const [loadingSsh, setLoadingSsh] = useState(false);
+  const [sshDownloaded, setSshDownloaded] = useState(false);
+  const [sshError, setSshError] = useState<string | null>(null);
 
-  // Fetch tasks
+  // Fetch tasks on mount
   useEffect(() => {
-    fetch("https://backend.hacklab.uz/tasks", {
+    const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      setError(t("errorLoadingTasks"));
+      return;
+    }
+
+    fetch("https://unrefulgently-unitalicized-greta.ngrok-free.dev/tasks", {
       method: "GET",
-      credentials: "include",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        "ngrok-skip-browser-warning": "true",
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Internal Server Error");
+        if (!res.ok) throw new Error("Failed to load tasks");
         return res.json();
       })
       .then((data) => {
         setTasks(data);
-        setFilteredTasks(data);
       })
-      .catch(() => setError(t("errorLoadingTasks")));
+      .catch((err) => {
+        console.error(err);
+        setError(t("errorLoadingTasks"));
+      });
   }, [t]);
 
-  // Filter tasks
-  useEffect(() => {
-    let filtered = tasks.filter(
-      (task) =>
-        task.title.toLowerCase().includes(search.toLowerCase()) ||
-        task.difficulty.toLowerCase().includes(search.toLowerCase())
-    );
-
-    if (difficultyFilter !== "All") {
-      filtered = filtered.filter(
-        (task) =>
-          task.difficulty.toLowerCase() === difficultyFilter.toLowerCase()
-      );
+  // Handle SSH Key Download
+  const handleDownloadSshKey = async () => {
+    const token = localStorage.getItem("access_token");
+    if (!token) {
+      setSshError("Not authenticated. Please log in again.");
+      return;
     }
 
-    setFilteredTasks(filtered);
-  }, [search, tasks, difficultyFilter]);
-
-useEffect(() => {
-  const fetchSshKey = async () => {
     try {
       setLoadingSsh(true);
-      const res = await fetch("https://backend.hacklab.uz/me/ssh/public", {
-        method: "GET",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      console.log("SSH Key fetch data:", data);
+      setSshError(null);
 
-      if (data.public_keys && Array.isArray(data.public_keys) && data.public_keys.length > 0) {
-        const key = data.public_keys[0].trim();
-        setSshKey(key);
-
-        // Show modal only once per session
-        if (!sessionStorage.getItem("sshModalShown")) {
-          setShowSshModal(true);
-          sessionStorage.setItem("sshModalShown", "true");
+      const response = await fetch(
+        "https://unrefulgently-unitalicized-greta.ngrok-free.dev/me/ssh/private",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
         }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch SSH key");
       }
-    } catch (err) {
-      console.error("Error fetching SSH key:", err);
+
+      const blob = await response.blob();
+      const text = await blob.text();
+
+      // Basic validation
+      if (!text.includes("PRIVATE KEY")) {
+        throw new Error("Invalid SSH key format");
+      }
+
+      // Trigger download
+      const downloadBlob = new Blob([text], { type: "text/plain" });
+      const url = window.URL.createObjectURL(downloadBlob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "id_rsa"; // Correct filename for SSH
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      setSshDownloaded(true);
+    } catch (err: any) {
+      console.error(err);
+      setSshError("Failed to download SSH key: " + err.message);
     } finally {
       setLoadingSsh(false);
     }
-  };
-
-  fetchSshKey();
-}, []);
-
-
-  const handleDownloadSsh = () => {
-    if (!sshKey) return;
-    const blob = new Blob([sshKey], { type: "application/x-pem-file" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "hacklab_key.pem";
-    a.click();
-    URL.revokeObjectURL(url);
-    setShowSshModal(false);
   };
 
   const handleOpenDetails = (id: string) => {
@@ -136,62 +137,16 @@ useEffect(() => {
     setSelectedTaskId(null);
   };
 
+  // Filter tasks
+  const filteredTasks = tasks.filter((task) => {
+    const matchesSearch = task.title.toLowerCase().includes(search.toLowerCase());
+    const matchesDifficulty = difficultyFilter === "All" || task.difficulty === difficultyFilter;
+    return matchesSearch && matchesDifficulty;
+  });
+
   return (
     <Box sx={{ p: 4 }}>
-      {/* SSH Modal */}
-      <Modal
-        open={showSshModal}
-        onClose={() => setShowSshModal(false)}
-        sx={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
-          mt: "5%",
-        }}
-      >
-        <Box
-          sx={{
-            bgcolor: "#0a0a0a",
-            border: "1px solid #00ff88",
-            borderRadius: "12px",
-            p: 4,
-            width: "90%",
-            maxWidth: "500px",
-            color: "#00ff88",
-            textAlign: "center",
-            boxShadow: "0px 0px 20px #00ff8855",
-          }}
-        >
-          {loadingSsh ? (
-            <CircularProgress sx={{ color: "#00ff88" }} />
-          ) : (
-            <>
-              <Typography variant="h5" sx={{ mb: 2 }}>
-                🎉 Welcome to HackLab!
-              </Typography>
-              <Typography sx={{ mb: 3 }}>
-                Your SSH key is ready — download it to connect securely.
-              </Typography>
-              <Button
-                onClick={handleDownloadSsh}
-                startIcon={<DownloadIcon />}
-                sx={{
-                  border: "1px solid #00ff88",
-                  color: "#00ff88",
-                  fontFamily: "Fira Code",
-                  borderRadius: "8px",
-                  px: 3,
-                  "&:hover": { bgcolor: "#00ff8844" },
-                }}
-              >
-                Download .pem
-              </Button>
-            </>
-          )}
-        </Box>
-      </Modal>
-
-      {/* Header */}
+      {/* Header with Filters + SSH Button */}
       <Box
         sx={{
           display: "flex",
@@ -199,14 +154,45 @@ useEffect(() => {
           justifyContent: "space-between",
           alignItems: "center",
           gap: 2,
-          mb: 3,
+          mb: 4,
         }}
       >
-        <Typography variant="h4">{t("title")}</Typography>
+        <Typography variant="h4" sx={{ fontFamily: "Fira Code" }}>
+          {t("title")}
+        </Typography>
 
-        <Box sx={{ display: "flex", gap: 2 }}>
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>{t("difficulty")}</InputLabel>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
+          {/* SSH Key Download Button */}
+          <Button
+            variant="outlined"
+            size="small"
+            startIcon={loadingSsh ? <CircularProgress size={16} /> : <KeyIcon />}
+            endIcon={!loadingSsh && <DownloadIcon />}
+            onClick={handleDownloadSshKey}
+            disabled={loadingSsh}
+            sx={{
+              borderColor: "#00ff88",
+              color: "#00ff88",
+              fontFamily: "Fira Code",
+              textTransform: "none",
+              fontSize: "0.875rem",
+              "&:hover": {
+                borderColor: "#00ffaa",
+                bgcolor: "#00ff8811",
+              },
+              minWidth: "180px",
+            }}
+          >
+            {loadingSsh
+              ? "Downloading..."
+              : sshDownloaded
+              ? "Key Downloaded ✓"
+              : "Download SSH Key"}
+          </Button>
+
+          {/* Difficulty Filter */}
+          <FormControl size="small" sx={{ minWidth: 120 }}>
+            <InputLabel sx={{ color: "#00ff88" }}>{t("difficulty")}</InputLabel>
             <Select
               value={difficultyFilter}
               label={t("difficulty")}
@@ -215,9 +201,7 @@ useEffect(() => {
                 color: "#00ff88",
                 fontFamily: "Fira Code",
                 ".MuiOutlinedInput-notchedOutline": { borderColor: "#00ff88" },
-                "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#00ffaa",
-                },
+                "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#00ffaa" },
               }}
             >
               <MenuItem value="All">{t("all")}</MenuItem>
@@ -227,65 +211,65 @@ useEffect(() => {
             </Select>
           </FormControl>
 
+          {/* Search */}
           <TextField
             placeholder={t("searchPlaceholder")}
             variant="outlined"
             size="small"
-            sx={{
-              width: { xs: "100%", sm: "300px" },
-              input: { color: "#00ff88", fontFamily: "Fira Code" },
-            }}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            sx={{
+              width: { xs: "100%", sm: "250px" },
+              input: { color: "#00ff88", fontFamily: "Fira Code" },
+              ".MuiOutlinedInput-notchedOutline": { borderColor: "#00ff88" },
+              "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#00ffaa" },
+            }}
           />
         </Box>
       </Box>
 
+      {/* SSH Error */}
+      {sshError && (
+        <Alert severity="error" sx={{ mb: 2, fontFamily: "Fira Code" }}>
+          {sshError}
+        </Alert>
+      )}
+
+      {/* General Error */}
       {error && (
-        <Alert
-          severity="error"
-          sx={{
-            mb: 3,
-            borderRadius: 2,
-            fontFamily: "Fira Code",
-            backgroundColor: "#2b0000",
-            color: "#ff8888",
-          }}
-        >
+        <Alert severity="error" sx={{ mb: 3, fontFamily: "Fira Code", bgcolor: "#2b0000" }}>
           {error}
         </Alert>
       )}
 
-      {!error && (
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-            gap: 2,
-          }}
-        >
-          {filteredTasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              task={task}
-              onView={() => handleOpenDetails(task.id)}
-            />
-          ))}
-        </Box>
-      )}
+      {/* Task Grid */}
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gap: 3,
+        }}
+      >
+        {filteredTasks.map((task) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            onView={() => handleOpenDetails(task.id)}
+          />
+        ))}
+      </Box>
 
-      {/* Task Details Modal */}
+      {/* Task Details Dialog */}
       <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogContent sx={{ bgcolor: "#111", color: "#fff" }}>
+        <DialogContent sx={{ bgcolor: "#111", color: "#fff", p: 4 }}>
           {selectedTaskId ? (
             <TaskDetails taskId={selectedTaskId} />
           ) : (
-            <CircularProgress
-              sx={{ color: "#00ff88", display: "block", mx: "auto", my: 4 }}
-            />
+            <CircularProgress sx={{ color: "#00ff88", display: "block", mx: "auto" }} />
           )}
         </DialogContent>
       </Dialog>
+
     </Box>
   );
 };

@@ -9,7 +9,6 @@ const Login = () => {
   const { t } = useTranslation();
 
   const handleLogin = () => {
-    // Redirect user to backend login endpoint
     window.location.href = `https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/login`;
   };
 

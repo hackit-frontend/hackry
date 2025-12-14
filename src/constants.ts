@@ -1,1 +1,1 @@
-export const API_BASE = "https://hacklab.uz/";
+export const API_BASE = "https://unrefulgently-unitalicized-greta.ngrok-free.dev/";
