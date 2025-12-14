@@ -3,12 +3,14 @@ import { Google } from "@mui/icons-material";
 import { Typewriter } from "react-simple-typewriter";
 import { useTranslation } from "react-i18next";
 
+import { API_BASE } from "../constants";
+
 const Login = () => {
   const { t } = useTranslation();
 
   const handleLogin = () => {
     // Redirect user to backend login endpoint
-    window.location.href = "https://backend.hacklab.uz/auth/login";
+    window.location.href = `${API_BASE}auth/login`;
   };
 
   return (

@@ -1,6 +1,4 @@
-// src/services/api.ts
-export const API_BASE = "https://backend.hacklab.uz";
-
+import { API_BASE } from "../constants";
 export async function fetchSSHKey(token: string): Promise<string | null> {
   try {
     const res = await fetch(`${API_BASE}/me/ssh/public`, {

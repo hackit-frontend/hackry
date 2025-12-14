@@ -11,7 +11,7 @@ const App: React.FC = () => {
 
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [sshKey, setSshKey] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const checkAuthAndFetchKey = async () => {
@@ -43,7 +43,7 @@ const App: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await fetch("https://backend.hacklab.uz/auth/logout", {
+      await fetch("https://unrefulgently-unitalicized-greta.ngrok-free.dev/", {
         method: "POST",
         credentials: "include", // so the backend clears cookie
       });
