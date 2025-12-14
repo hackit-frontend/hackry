@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   Box,
   Typography,
@@ -28,16 +28,18 @@ interface Task {
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
+
+  // Tasks & filters
   const [tasks, setTasks] = useState<Task[]>([]);
   const [search, setSearch] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
   const [error, setError] = useState<string | null>(null);
 
   // Task details modal
-  const [open, setOpen] = useState(false);
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
-  // SSH Key download state
+  // SSH key download
   const [loadingSsh, setLoadingSsh] = useState(false);
   const [sshDownloaded, setSshDownloaded] = useState(false);
   const [sshError, setSshError] = useState<string | null>(null);
@@ -63,24 +65,34 @@ const Home: React.FC = () => {
         if (!res.ok) throw new Error("Failed to load tasks");
         return res.json();
       })
-      .then((data) => {
-        setTasks(data);
-      })
+      .then((data) => setTasks(data))
       .catch((err) => {
         console.error(err);
         setError(t("errorLoadingTasks"));
       });
   }, [t]);
 
-  // Handle SSH Key Download
+  // Open task details
+  const handleOpenDetails = useCallback((task: Task) => {
+    setSelectedTask(task);
+    setOpenDetails(true);
+  }, []);
+
+  const handleCloseDetails = () => {
+    setOpenDetails(false);
+    setSelectedTask(null);
+  };
+
+  // Download SSH private key
   const handleDownloadSshKey = async () => {
     const token = localStorage.getItem("access_token");
     if (!token) {
-      setSshError("Not authenticated. Please log in again.");
+      setSshError("Authentication required. Please log in again.");
       return;
     }
 
-    try {
+    // @ts-ignore
+      try {
       setLoadingSsh(true);
       setSshError(null);
 
@@ -96,23 +108,22 @@ const Home: React.FC = () => {
       );
 
       if (!response.ok) {
-        throw new Error("Failed to fetch SSH key");
+        throw new Error(`Failed to fetch key (${response.status})`);
       }
 
       const blob = await response.blob();
       const text = await blob.text();
 
-      // Basic validation
       if (!text.includes("PRIVATE KEY")) {
-        throw new Error("Invalid SSH key format");
+        throw new Error("Received invalid SSH key format");
       }
 
-      // Trigger download
       const downloadBlob = new Blob([text], { type: "text/plain" });
       const url = window.URL.createObjectURL(downloadBlob);
+
       const a = document.createElement("a");
       a.href = url;
-      a.download = "id_rsa"; // Correct filename for SSH
+      a.download = "id_rsa"; // Standard OpenSSH private key name
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -121,52 +132,50 @@ const Home: React.FC = () => {
       setSshDownloaded(true);
     } catch (err: any) {
       console.error(err);
-      setSshError("Failed to download SSH key: " + err.message);
+      setSshError("Download failed: " + err.message);
     } finally {
       setLoadingSsh(false);
     }
   };
 
-  const handleOpenDetails = (id: string) => {
-    setSelectedTaskId(id);
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedTaskId(null);
-  };
-
   // Filter tasks
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(search.toLowerCase());
-    const matchesDifficulty = difficultyFilter === "All" || task.difficulty === difficultyFilter;
+    const matchesDifficulty =
+      difficultyFilter === "All" || task.difficulty === difficultyFilter;
     return matchesSearch && matchesDifficulty;
   });
 
   return (
-    <Box sx={{ p: 4 }}>
-      {/* Header with Filters + SSH Button */}
+    <Box sx={{ p: { xs: 2, md: 4 } }}>
+      {/* Header: Title + Controls */}
       <Box
         sx={{
           display: "flex",
-          flexWrap: "wrap",
+          flexDirection: { xs: "column", md: "row" },
           justifyContent: "space-between",
-          alignItems: "center",
-          gap: 2,
+          alignItems: { xs: "stretch", md: "center" },
+          gap: 3,
           mb: 4,
         }}
       >
-        <Typography variant="h4" sx={{ fontFamily: "Fira Code" }}>
+        <Typography variant="h4" sx={{ fontFamily: "Fira Code", color: "#00ff88" }}>
           {t("title")}
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, flexWrap: "wrap" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 2,
+            alignItems: "center",
+          }}
+        >
           {/* SSH Key Download Button */}
           <Button
             variant="outlined"
-            size="small"
-            startIcon={loadingSsh ? <CircularProgress size={16} /> : <KeyIcon />}
+            size="medium"
+            startIcon={loadingSsh ? <CircularProgress size={18} /> : <KeyIcon />}
             endIcon={!loadingSsh && <DownloadIcon />}
             onClick={handleDownloadSshKey}
             disabled={loadingSsh}
@@ -175,12 +184,11 @@ const Home: React.FC = () => {
               color: "#00ff88",
               fontFamily: "Fira Code",
               textTransform: "none",
-              fontSize: "0.875rem",
+              minWidth: 200,
               "&:hover": {
                 borderColor: "#00ffaa",
-                bgcolor: "#00ff8811",
+                bgcolor: "rgba(0, 255, 136, 0.08)",
               },
-              minWidth: "180px",
             }}
           >
             {loadingSsh
@@ -219,7 +227,7 @@ const Home: React.FC = () => {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             sx={{
-              width: { xs: "100%", sm: "250px" },
+              width: { xs: "100%", sm: 250 },
               input: { color: "#00ff88", fontFamily: "Fira Code" },
               ".MuiOutlinedInput-notchedOutline": { borderColor: "#00ff88" },
               "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#00ffaa" },
@@ -228,14 +236,13 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
-      {/* SSH Error */}
+      {/* Errors */}
       {sshError && (
         <Alert severity="error" sx={{ mb: 2, fontFamily: "Fira Code" }}>
           {sshError}
         </Alert>
       )}
 
-      {/* General Error */}
       {error && (
         <Alert severity="error" sx={{ mb: 3, fontFamily: "Fira Code", bgcolor: "#2b0000" }}>
           {error}
@@ -254,22 +261,46 @@ const Home: React.FC = () => {
           <TaskCard
             key={task.id}
             task={task}
-            onView={() => handleOpenDetails(task.id)}
+            // Stable callback — no page reload!
+            onView={() => handleOpenDetails(task)}
           />
         ))}
       </Box>
 
-      {/* Task Details Dialog */}
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-        <DialogContent sx={{ bgcolor: "#111", color: "#fff", p: 4 }}>
-          {selectedTaskId ? (
-            <TaskDetails taskId={selectedTaskId} />
+      {/* Task Details Modal */}
+      <Dialog
+        open={openDetails}
+        onClose={handleCloseDetails}
+        maxWidth="md"
+        fullWidth
+        PaperProps={{
+          sx: { bgcolor: "#111", color: "#fff" },
+        }}
+      >
+        <DialogContent sx={{ p: 4 }}>
+          {selectedTask?.id ? (
+            <TaskDetails task={selectedTask} />
           ) : (
             <CircularProgress sx={{ color: "#00ff88", display: "block", mx: "auto" }} />
           )}
         </DialogContent>
       </Dialog>
 
+      {/* Optional tip after download */}
+      {sshDownloaded && (
+        <Typography
+          variant="body2"
+          sx={{
+            mt: 4,
+            textAlign: "center",
+            color: "#00ff88",
+            fontFamily: "Fira Code",
+            fontStyle: "italic",
+          }}
+        >
+          Tip: Run <code>chmod 600 id_rsa</code> after saving the key.
+        </Typography>
+      )}
     </Box>
   );
 };
