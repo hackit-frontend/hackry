@@ -40,8 +40,9 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
         const data = await res.json();
         setUserName(data.name || "");
         setUserEmail(data.email || "");
-        if (data.photo || data.avatar) {
-          setAvatarUrl(data.photo || data.avatar);
+        const photo = data.picture || data.photo || data.avatar || data.image || data.imageUrl || data.photoUrl;
+        if (photo) {
+          setAvatarUrl(photo);
         }
       } catch (err) {
         console.error("Failed to load user info", err);
