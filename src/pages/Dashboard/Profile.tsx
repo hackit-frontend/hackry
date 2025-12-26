@@ -8,6 +8,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useTranslation } from "react-i18next";
 
 interface UserStats {
   completedTasks: number;
@@ -19,9 +20,11 @@ interface UserStats {
 interface ProfileProps {
   sshKey?: string | null;
   isAuthenticated: boolean;
+  onLogout: () => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
+const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) => {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -141,6 +144,27 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
             Copy SSH Key
           </Button>
         )}
+      </Box>
+
+      {/* Logout Button */}
+      <Box sx={{ mt: 4 }}>
+        <Button
+          onClick={onLogout}
+          fullWidth
+          sx={{
+            color: "#FF0000",
+            fontFamily: "Fira Code",
+            border: "1px solid #FF0000",
+            borderRadius: "8px",
+            py: 1.5,
+            "&:hover": { 
+              bgcolor: "#FF000044",
+              borderColor: "#FF3333",
+            },
+          }}
+        >
+          {t("navLogout")}
+        </Button>
       </Box>
     </Box>
   );

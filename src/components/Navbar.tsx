@@ -6,10 +6,9 @@ import { useTranslation } from "react-i18next";
 
 interface Props {
   token?: string | null;
-  onLogout: () => void;
 }
 
-const Navbar: React.FC<Props> = ({ token, onLogout }) => {
+const Navbar: React.FC<Props> = ({ token }) => {
   const { t, i18n } = useTranslation();
 
   const toggleLanguage = () => {
@@ -61,32 +60,25 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
             {t("navDashboard")}
           </Button>
 
-          {token ? (
-            <Button
-              onClick={onLogout}
-              sx={{
-                color: "#00FF00",
-                fontFamily: "Fira Code",
-                border: "1px solid #00FF00",
-                borderRadius: "8px",
-                "&:hover": { bgcolor: "#00FF0044" },
-              }}
-            >
-              {t("navLogout")}
-            </Button>
-          ) : (
+          {!token && (
             <Button
               onClick={handelLogin}
               sx={{
-                color: "#00FF00",
+                background: "linear-gradient(135deg, #00FF00 0%, #00ffaa 100%)",
+                color: "#000",
                 fontFamily: "Fira Code",
+                fontWeight: 600,
+                px: 3,
+                py: 1,
+                textTransform: "none",
                 borderRadius: "8px",
-                "&:hover": { bgcolor: "#00FF0044" },
+                "&:hover": {
+                  boxShadow: "0 0 20px rgba(0, 255, 0, 0.4)",
+                },
               }}
             >
-              {t("loginWithGoogle")}
+              {t("home.cta")}
             </Button>
-
           )}
 
           <Button

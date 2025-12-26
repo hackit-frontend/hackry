@@ -1,13 +1,10 @@
 import React from "react";
 import { Box, Typography, Button, Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
 
-  const isAuthenticated = !!localStorage.getItem("access_token");
 
   return (
     <Box
@@ -20,7 +17,6 @@ const Home: React.FC = () => {
       }}
     >
       <Container maxWidth="lg">
-        {/* Hero Section */}
         <Box sx={{ textAlign: "center", mb: { xs: 6, md: 10 } }}>
           <Typography
             variant="h3"
@@ -77,7 +73,6 @@ const Home: React.FC = () => {
           </Typography>
         </Box>
 
-        {/* Features Section */}
         <Box sx={{ mb: { xs: 6, md: 8 } }}>
           <Typography
             variant="h4"
@@ -126,72 +121,6 @@ const Home: React.FC = () => {
               </Box>
             ))}
           </Box>
-        </Box>
-
-        {/* CTA Section */}
-        <Box sx={{ textAlign: "center" }}>
-          {isAuthenticated ? (
-            <Box>
-              <Typography
-                variant="body1"
-                sx={{
-                  color: "#aaa",
-                  mb: 2,
-                  fontSize: "1rem",
-                }}
-              >
-                {t("home.alreadyMember")}
-              </Typography>
-              <Button
-                onClick={() => navigate("/tasks")}
-                variant="contained"
-                sx={{
-                  background: "linear-gradient(135deg, #00FF00 0%, #00ffaa 100%)",
-                  color: "#000",
-                  fontFamily: "Fira Code",
-                  fontWeight: 600,
-                  px: 4,
-                  py: 1.5,
-                  fontSize: "1.1rem",
-                  textTransform: "none",
-                  borderRadius: "8px",
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    boxShadow: "0 0 30px rgba(0, 255, 0, 0.5)",
-                    transform: "translateY(-2px)",
-                  },
-                }}
-              >
-                {t("home.goToTasks")}
-              </Button>
-            </Box>
-          ) : (
-            <Button
-              onClick={() => {
-                window.location.href =
-                  "https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/google";
-              }}
-              variant="contained"
-              sx={{
-                background: "linear-gradient(135deg, #00FF00 0%, #00ffaa 100%)",
-                color: "#000",
-                fontFamily: "Fira Code",
-                fontWeight: 600,
-                px: 4,
-                py: 1.5,
-                fontSize: "1.1rem",
-                textTransform: "none",
-                borderRadius: "8px",
-                transition: "all 0.3s ease",
-                "&:hover": {
-                  boxShadow: "0 0 30px rgba(0, 255, 0, 0.5)",
-                  transform: "translateY(-2px)",
-                },
-              }}
-            >
-              {t("home.cta")}
-            </Button>
-          )}
         </Box>
       </Container>
     </Box>
