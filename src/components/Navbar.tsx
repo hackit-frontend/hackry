@@ -32,7 +32,7 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
   //   },
   // });
   const handelLogin = () => { 
-    window.location.href = "https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/google";
+    window.location.href = "https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/login";
   }
 
   return (
