@@ -64,20 +64,17 @@ const Navbar: React.FC<Props> = ({ token }) => {
             <Button
               onClick={handelLogin}
               sx={{
-                background: "linear-gradient(135deg, #00FF00 0%, #00ffaa 100%)",
-                color: "#000",
+                color: "#00FF00",
                 fontFamily: "Fira Code",
-                fontWeight: 600,
+                border: "1px solid #00FF00",
+                borderRadius: "8px",
                 px: 3,
                 py: 1,
                 textTransform: "none",
-                borderRadius: "8px",
-                "&:hover": {
-                  boxShadow: "0 0 20px rgba(0, 255, 0, 0.4)",
-                },
+                "&:hover": { bgcolor: "#00FF0044" },
               }}
             >
-              {t("home.cta")}
+              {t("loginWithGoogle")}
             </Button>
           )}
 
