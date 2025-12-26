@@ -62,25 +62,12 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Navbar token={isAuthenticated ? "true" : null} />
+      <Navbar token={isAuthenticated ? "true" : null} onLogout={handleLogout} />
 
       <Routes>
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} isAuthenticated={isAuthenticated} onLogout={handleLogout} />} />
         <Route path="/tasks" element={<Tasks />} />
-        <Route
-          path="/"
-          element={
-            isAuthenticated ? (
-              <Dashboard
-                sshKey={sshKey}
-                isAuthenticated={isAuthenticated}
-                onLogout={handleLogout}
-              />
-            ) : (
-              <Home />
-            )
-          }
-        />
+        <Route path="/" element={isAuthenticated ? <Tasks /> : <Home />} />
       </Routes>
     </>
   );
