@@ -14,7 +14,6 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [sshKey, setSshKey] = useState<string>("");
 
-  // Detect token from URL after Google OAuth and mark authenticated
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
@@ -25,7 +24,6 @@ const App: React.FC = () => {
     }
   }, [navigate]);
 
-  // On initial load, check localStorage for existing token
   useEffect(() => {
     const existing = localStorage.getItem("access_token");
     if (existing) {
@@ -33,7 +31,6 @@ const App: React.FC = () => {
     }
   }, []);
 
-  // Fetch SSH key after auth
   useEffect(() => {
     const loadKey = async () => {
       const token = localStorage.getItem("access_token");
@@ -70,7 +67,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} isAuthenticated={isAuthenticated} onLogout={handleLogout} />} />
         <Route path="/tasks" element={<Tasks />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={isAuthenticated ? <Tasks /> : <Home />} />
       </Routes>
     </>
   );
