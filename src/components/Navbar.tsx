@@ -2,7 +2,6 @@ import React from "react";
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useGoogleLogin } from "@react-oauth/google";
 
 
 interface Props {
@@ -17,23 +16,11 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
     i18n.changeLanguage(i18n.language === "uz" ? "en" : "uz");
   };
 
-  const login = useGoogleLogin({
-    flow: "implicit",
-    onSuccess: async (tokenResponse) => {
-      console.log("Google Token:", tokenResponse);
 
-      await fetch("https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/google", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ access_token: tokenResponse.access_token }),
-      });
-    },
-    onError: () => {
-      console.log("Google Login Failed");
-    },
-  });
  
-
+const handleLogin = () => {
+  window.location.href = 'https://backend.hacklab.uz/auth/google';
+}
   return (
     <AppBar position="static" sx={{ bgcolor: "black", boxShadow: "none" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -85,7 +72,7 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
             </Button>
           ) : (
             <Button
-              onClick={() => login()}
+              onClick={handleLogin}
               sx={{
                 color: "#00FF00",
                 fontFamily: "Fira Code",
