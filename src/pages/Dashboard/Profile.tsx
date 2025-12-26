@@ -15,6 +15,7 @@ interface UserStats {
   rank: string;
   name: string;
   email: string;
+  surname?: string;
 }
 
 interface ProfileProps {
@@ -27,6 +28,12 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
   const { t } = useTranslation();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -34,6 +41,7 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
     const fetchProfile = async () => {
       try {
         setLoading(true);
+        setError(null);
         const res = await fetch("https://backend.hacklab.uz/profile", {
           method: "GET",
           credentials: "include", // sends cookie
@@ -41,9 +49,13 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
         setStats(data);
+        setName(data.name || "");
+        setSurname(data.surname || "");
+        setEmail(data.email || "");
       } catch (err) {
         console.error(err);
         setStats(null);
+        setError((err as any)?.message || "Failed to fetch profile");
       } finally {
         setLoading(false);
       }
@@ -51,6 +63,29 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
 
     fetchProfile();
   }, [isAuthenticated]);
+
+  const handleSave = async () => {
+    try {
+      setSaving(true);
+      setError(null);
+      const res = await fetch("https://backend.hacklab.uz/profile", {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, surname }),
+      });
+      if (!res.ok) throw new Error("Failed to update profile");
+      const data = await res.json();
+      setStats(data);
+      setName(data.name || name);
+      setSurname(data.surname || surname);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || "Failed to update profile");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleCopy = () => {
     if (sshKey) {
@@ -95,6 +130,8 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
               <CircularProgress size={20} sx={{ color: "#00FF00" }} />
               <Typography>Loading profile...</Typography>
             </Box>
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
           ) : stats ? (
             <>
               <Typography variant="h6" sx={{ mb: 2 }}>
@@ -110,6 +147,72 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
           )}
         </CardContent>
       </Card>
+
+      {/* Editable fields */}
+      {!loading && !error && (
+        <Box sx={{ mt: 3, display: "grid", gap: 2 }}>
+          <Box>
+            <Typography sx={{ mb: 0.5 }}>Name</Typography>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                background: "#0a0a0a",
+                border: "1px solid #00FF00",
+                color: "#00FF00",
+                borderRadius: "8px",
+                fontFamily: "Fira Code",
+              }}
+            />
+          </Box>
+          <Box>
+            <Typography sx={{ mb: 0.5 }}>Surname</Typography>
+            <input
+              value={surname}
+              onChange={(e) => setSurname(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "10px",
+                background: "#0a0a0a",
+                border: "1px solid #00FF00",
+                color: "#00FF00",
+                borderRadius: "8px",
+                fontFamily: "Fira Code",
+              }}
+            />
+          </Box>
+          <Box>
+            <Typography sx={{ mb: 0.5 }}>Email</Typography>
+            <input
+              value={email}
+              readOnly
+              style={{
+                width: "100%",
+                padding: "10px",
+                background: "#0a0a0a",
+                border: "1px solid #444",
+                color: "#888",
+                borderRadius: "8px",
+                fontFamily: "Fira Code",
+              }}
+            />
+          </Box>
+          <Button
+            onClick={handleSave}
+            disabled={saving}
+            sx={{
+              border: "1px solid #00FF00",
+              color: "#00FF00",
+              fontFamily: "Fira Code",
+              "&:hover": { bgcolor: "#00FF0044" },
+            }}
+          >
+            {saving ? "Saving..." : "Save"}
+          </Button>
+        </Box>
+      )}
 
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6" sx={{ mb: 1 }}>

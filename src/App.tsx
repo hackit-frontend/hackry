@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
+import { fetchSSHKey } from "./services/api";
 
 import { API_BASE } from "./constants";
 
@@ -31,6 +32,20 @@ const App: React.FC = () => {
       setIsAuthenticated(true);
     }
   }, []);
+
+  // Fetch SSH key after auth
+  useEffect(() => {
+    const loadKey = async () => {
+      const token = localStorage.getItem("access_token");
+      if (!token) return;
+      const key = await fetchSSHKey(token);
+      if (key) setSshKey(key);
+    };
+
+    if (isAuthenticated) {
+      loadKey();
+    }
+  }, [isAuthenticated]);
 
   const handleLogout = async () => {
     try {

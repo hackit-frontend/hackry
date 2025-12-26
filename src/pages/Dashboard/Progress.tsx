@@ -12,12 +12,16 @@ interface ProgressProps {
 
 const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
   const [progress, setProgress] = useState<UserProgress | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isAuthenticated) return;
 
     const fetchProgress = async () => {
       try {
+        setLoading(true);
+        setError(null);
         const [tasksRes, completedRes] = await Promise.all([
           fetch("https://backend.hacklab.uz/tasks", {
             credentials: "include",
@@ -27,7 +31,9 @@ const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
           }),
         ]);
 
-        if (!tasksRes.ok || !completedRes.ok) return;
+        if (!tasksRes.ok || !completedRes.ok) {
+          throw new Error("Failed to load progress");
+        }
 
         const tasks = await tasksRes.json();
         const completed = await completedRes.json();
@@ -36,8 +42,12 @@ const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
           totalTasks: tasks.length,
           completedTasks: completed.length,
         });
-      } catch (err) {
+      } catch (err: any) {
         console.error(err);
+        setError(err.message || "Failed to load progress");
+      }
+      finally {
+        setLoading(false);
       }
     };
 
@@ -63,7 +73,11 @@ const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
 
       <Card sx={{ maxWidth: 400 }}>
         <CardContent>
-          {progress ? (
+          {loading ? (
+            <Typography color="text.secondary">Loading progress...</Typography>
+          ) : error ? (
+            <Typography color="error">{error}</Typography>
+          ) : progress ? (
             <>
               <Typography sx={{ mb: 1 }}>
                 Tasks Completed: {progress.completedTasks} / {progress.totalTasks}
