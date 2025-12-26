@@ -7,11 +7,12 @@
   "medium": "O‘rta",
   "hard": "Qiyin",
   "footerText": "Xakerlik ko‘nikmalaringizni oshiring",
-  "loginWithGoogle": "Google orqali tizimga kiring",
+  "loginWithGoogle": "Kirish",
   "loginLine1": "Hackry platformasiga xush kelibsiz — bu axloqiy xakerlar uchun maydon.",
   "loginLine2": "Haqiqiy kiberxavfsizlik muammolarini hal qiling.",
   "loginLine3": "Ko‘nikmalaringizni oshiring. Reytingda yuqoriga chiqing. Tizimni zabt eting.",
   "navHome": "Bosh sahifa",
+  "navTasks": "Vazifalar",
   "navDashboard": "Boshqaruv paneli",
   "navLogout": "Chiqish",
   "errorLoadingTasks": "Vazifalarni ko‘rish uchun login qiling",
@@ -42,5 +43,31 @@
   "taskDetails": {
     "startTask": "Vazifani boshlash",
     "sshKey": "SSH kaliti"
+  },
+
+  "ssh": {
+    "downloadButton": "SSH kalitini yuklab olish",
+    "downloading": "Yuklanmoqda...",
+    "downloaded": "Kalit yuklandi ✓",
+    "authRequired": "Autentifikatsiya talab qilinadi. Iltimos, qayta kiring.",
+    "invalidFormat": "SSH kalit formati noto‘g‘ri",
+    "downloadFailed": "Yuklab olish muvaffaqiyatsiz: {{message}}",
+    "chmodTipPrefix": "Maslahat: ",
+    "chmodTipSuffix": "buyrug‘ini kalitni saqlagandan so‘ng ishga tushiring."
+  },
+
+  "home": {
+    "tagline": "Haqiqiy Xavfsizlik Muammolari Orqali Xakerlikni O'rganing",
+    "description1": "HackLab platformasiga xush kelibsiz — kiberxavfsizlik va axloqiy xakerlar uchun eng yaxshi platforma.",
+    "description2": "Haqiqiy kiberxavfsizlik stsenariylarini sinab ko'ring: tarmoq xavfsizligidan dastur zaif tomonlari qadar.",
+    "features": "Nima Qilasiz",
+    "feature1": "Murakkab kiberxavfsizlik muammolarini hal qiling",
+    "feature2": "Nazorat qilingan muhitda axloqiy xakerlikni amaliyotda qo'llang",
+    "feature3": "Global reytingda raqobat qiling",
+    "feature4": "Ishlab chiqarishga tayyor xavfsizlik malakasini rivojlantiring",
+    "cta": "Hozir Boshlang",
+    "alreadyMember": "Allaqachon a'zo?",
+    "goToTasks": "Vazifalarga O'ting"
   }
 }
+

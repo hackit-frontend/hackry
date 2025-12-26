@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
         py: 2,
         textAlign: "center",
         bgcolor: "#000",
-        borderTop: "1px solid #00ff88",
+        borderTop: "1px solid #00FF00",
         position: "fixed",
         bottom: 0,
         width: "100%",
@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
       <Typography
         variant="body2"
         sx={{
-          color: "#00ff88",
+          color: "#00FF00",
           fontFamily: "Fira Code",
         }}
       >

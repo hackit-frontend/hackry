@@ -26,7 +26,7 @@ interface Task {
   description: string;
 }
 
-const Home: React.FC = () => {
+const Tasks: React.FC = () => {
   const { t } = useTranslation();
 
   // Tasks & filters
@@ -303,4 +303,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default Tasks;

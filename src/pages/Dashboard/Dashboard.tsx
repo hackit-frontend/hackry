@@ -18,12 +18,10 @@ const Dashboard: React.FC<DashboardProps> = ({ sshKey, isAuthenticated }) => {
         gap: 4,
       }}
     >
-      {/* Profile Section */}
       <Box sx={{ flex: 1, minWidth: 300 }}>
         <Profile sshKey={sshKey} isAuthenticated={isAuthenticated} />
       </Box>
 
-      {/* Progress Section */}
       <Box sx={{ flex: 1, minWidth: 300 }}>
         <Progress isAuthenticated={isAuthenticated} />
       </Box>

@@ -58,7 +58,7 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
 
   if (!isAuthenticated)
     return (
-      <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
+      <Typography sx={{ color: "#00FF00", fontFamily: "Fira Code" }}>
         Please login to see your profile.
       </Typography>
     );
@@ -67,10 +67,10 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
     <Box
       sx={{
         bgcolor: "#000",
-        color: "#00ff88",
+        color: "#00FF00",
         p: 4,
         borderRadius: 2,
-        border: "1px solid #00ff88",
+        border: "1px solid #00FF00",
         fontFamily: "Fira Code",
       }}
     >
@@ -82,14 +82,14 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
         sx={{
           bgcolor: "#0a0a0a",
           borderRadius: 2,
-          border: "1px solid #00ff88",
-          color: "#00ff88",
+          border: "1px solid #00FF00",
+          color: "#00FF00",
         }}
       >
         <CardContent>
           {loading ? (
             <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <CircularProgress size={20} sx={{ color: "#00ff88" }} />
+              <CircularProgress size={20} sx={{ color: "#00FF00" }} />
               <Typography>Loading profile...</Typography>
             </Box>
           ) : stats ? (
@@ -108,7 +108,6 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
         </CardContent>
       </Card>
 
-      {/* SSH Key Section */}
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6" sx={{ mb: 1 }}>
           SSH Key
@@ -120,7 +119,7 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
             borderRadius: 1,
             fontFamily: "Fira Code",
             fontSize: "0.9rem",
-            border: "1px solid #00ff88",
+            border: "1px solid #00FF00",
             wordBreak: "break-all",
             mb: 2,
           }}
@@ -133,10 +132,10 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated }) => {
             onClick={handleCopy}
             startIcon={<ContentCopyIcon />}
             sx={{
-              border: "1px solid #00ff88",
-              color: "#00ff88",
+              border: "1px solid #00FF00",
+              color: "#00FF00",
               fontFamily: "Fira Code",
-              "&:hover": { bgcolor: "#00ff8844" },
+              "&:hover": { bgcolor: "#00FF0044" },
             }}
           >
             Copy SSH Key

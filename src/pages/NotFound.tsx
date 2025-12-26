@@ -16,7 +16,7 @@ const NotFound: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         bgcolor: "#000",
-        color: "#00ff88",
+        color: "#00FF00",
         fontFamily: "Fira Code",
         textAlign: "center",
       }}
@@ -35,9 +35,9 @@ const NotFound: React.FC = () => {
         variant="outlined"
         onClick={() => navigate("/")}
         sx={{
-          color: "#00ff88",
-          borderColor: "#00ff88",
-          "&:hover": { bgcolor: "#00ff8844" },
+          color: "#00FF00",
+          borderColor: "#00FF00",
+          "&:hover": { bgcolor: "#00FF0044" },
         }}
       >
         {t("notFound.returnHome")}

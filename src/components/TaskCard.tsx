@@ -24,7 +24,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onView }) => {
         <Typography variant="body2" color="#aaa">
           {task.description}
         </Typography>
-        <Typography sx={{ mt: 1, color: "#00ff88" }}>
+        <Typography sx={{ mt: 1, color: "#00FF00" }}>
           {t("task.difficulty")}: {task.difficulty}
         </Typography>
         <Button
@@ -32,8 +32,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onView }) => {
           variant="outlined"
           sx={{
             mt: 2,
-            color: "#00ff88",
-            borderColor: "#00ff88",
+            color: "#00FF00",
+            borderColor: "#00FF00",
             "&:hover": { borderColor: "#00ffaa" },
           }}
         >

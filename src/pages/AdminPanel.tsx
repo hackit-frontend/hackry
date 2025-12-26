@@ -96,7 +96,7 @@ const AdminPanel: React.FC = () => {
     <Box
       sx={{
         bgcolor: "#000",
-        color: "#00ff88",
+        color: "#00FF00",
         minHeight: "100vh",
         p: 4,
         fontFamily: "Fira Code",
@@ -121,9 +121,9 @@ const AdminPanel: React.FC = () => {
           value={newTask.title}
           onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
           sx={{
-            input: { color: "#00ff88" },
-            label: { color: "#00ff88" },
-            fieldset: { borderColor: "#00ff88" },
+            input: { color: "#00FF00" },
+            label: { color: "#00FF00" },
+            fieldset: { borderColor: "#00FF00" },
             width: 250,
           }}
         />
@@ -135,9 +135,9 @@ const AdminPanel: React.FC = () => {
             setNewTask({ ...newTask, difficulty: e.target.value })
           }
           sx={{
-            input: { color: "#00ff88" },
-            label: { color: "#00ff88" },
-            fieldset: { borderColor: "#00ff88" },
+            input: { color: "#00FF00" },
+            label: { color: "#00FF00" },
+            fieldset: { borderColor: "#00FF00" },
             width: 200,
           }}
         />
@@ -151,9 +151,9 @@ const AdminPanel: React.FC = () => {
             setNewTask({ ...newTask, description: e.target.value })
           }
           sx={{
-            input: { color: "#00ff88" },
-            label: { color: "#00ff88" },
-            fieldset: { borderColor: "#00ff88" },
+            input: { color: "#00FF00" },
+            label: { color: "#00FF00" },
+            fieldset: { borderColor: "#00FF00" },
             width: 300,
           }}
         />
@@ -162,7 +162,7 @@ const AdminPanel: React.FC = () => {
             variant="contained"
             onClick={handleUpdate}
             sx={{
-              bgcolor: "#00ff88",
+              bgcolor: "#00FF00",
               color: "#000",
               "&:hover": { bgcolor: "#00cc66" },
             }}
@@ -174,7 +174,7 @@ const AdminPanel: React.FC = () => {
             variant="contained"
             onClick={handleAdd}
             sx={{
-              bgcolor: "#00ff88",
+              bgcolor: "#00FF00",
               color: "#000",
               "&:hover": { bgcolor: "#00cc66" },
             }}
@@ -192,8 +192,8 @@ const AdminPanel: React.FC = () => {
             sx={{
               width: 300,
               bgcolor: "#111",
-              border: "1px solid #00ff88",
-              color: "#00ff88",
+              border: "1px solid #00FF00",
+              color: "#00FF00",
             }}
           >
             <CardContent>

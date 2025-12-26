@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Login from "./components/Login";
-import Home from "./pages/ Home";
+import Home from "./pages/Home";
+import Tasks from "./pages/Tasks";
 
 import { API_BASE } from "./constants";
 
@@ -13,33 +13,38 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [sshKey, setSshKey] = useState<string>("");
 
+  // Detect token from URL after Google OAuth and mark authenticated
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const token = params.get("token");
 
-    if (!token) {
-      // no token → go back to login
-      // navigate("/login");
-        console.log("No token found");
-      return;
-
+    if (token) {
+      localStorage.setItem("access_token", token);
+      setIsAuthenticated(true);
     }
-
-    // save token
-    localStorage.setItem("access_token", token);
-    // navigate("/");
   }, [navigate]);
+
+  // On initial load, check localStorage for existing token
+  useEffect(() => {
+    const existing = localStorage.getItem("access_token");
+    if (existing) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const handleLogout = async () => {
     try {
       await fetch(`${API_BASE}/auth/logout`, {
         method: "POST",
-        credentials: "include", // so the backend clears cookie
+        credentials: "include",
       });
     } catch (err) {
       console.error("Logout error:", err);
+    } finally {
+      localStorage.removeItem("access_token");
       setSshKey("");
-    setIsAuthenticated(false);
+      setIsAuthenticated(false);
+      navigate("/");
     }
   };
 
@@ -48,8 +53,8 @@ const App: React.FC = () => {
       <Navbar token={isAuthenticated ? "true" : null} onLogout={handleLogout} />
 
       <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard sshKey={sshKey} isAuthenticated={false} />} />
+        <Route path="/dashboard" element={<Dashboard sshKey={sshKey} isAuthenticated={isAuthenticated} />} />
+        <Route path="/tasks" element={<Tasks />} />
         <Route path="/" element={<Home />} />
       </Routes>
     </>

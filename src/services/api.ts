@@ -13,7 +13,6 @@ export async function fetchSSHKey(token: string): Promise<string | null> {
     }
 
     const data = await res.json();
-    // Assuming backend returns { "ssh_key": "ssh-rsa AAAA..." }
     return data.ssh_key || null;
   } catch (err) {
     console.error("Error fetching SSH key:", err);

@@ -80,7 +80,7 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
   if (!task) {
     return (
       <Box sx={{ textAlign: "center", py: 4 }}>
-        <CircularProgress sx={{ color: "#00ff88" }} />
+        <CircularProgress sx={{ color: "#00FF00" }} />
         <Typography sx={{ mt: 2 }}>{t("loading")}</Typography>
       </Box>
     );
@@ -97,9 +97,9 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
         onClick={handleStart}
         variant="outlined"
         disabled={loading || !!containerInfo}
-        sx={{ color: "#00ff88", borderColor: "#00ff88" }}
+        sx={{ color: "#00FF00", borderColor: "#00FF00" }}
       >
-        {loading ? <CircularProgress size={24} sx={{ color: "#00ff88" }} /> : t("taskDetails.startTask")}
+        {loading ? <CircularProgress size={24} sx={{ color: "#00FF00" }} /> : t("taskDetails.startTask")}
       </Button>
 
       {containerInfo && (
@@ -107,7 +107,7 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
           <Alert
             severity="success"
             icon={<CheckCircleIcon />}
-            sx={{ mb: 3, bgcolor: "#001a0a", border: "1px solid #00ff88" }}
+            sx={{ mb: 3, bgcolor: "#001a0a", border: "1px solid #00FF00" }}
           >
             <Typography variant="subtitle1" fontWeight="bold">
               Success! Your SSH container is ready 🚀
@@ -145,7 +145,7 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
               fontFamily: "Fira Code, monospace",
               fontSize: "0.95rem",
               overflowX: "auto",
-              color: "#00ff88",
+              color: "#00FF00",
             }}
           >
             <code>
@@ -159,7 +159,7 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
                   position: "absolute",
                   top: 8,
                   right: 8,
-                  color: "#00ff88",
+                  color: "#00FF00",
                 }}
               >
                 {copied ? <CheckCircleIcon fontSize="small" /> : <ContentCopyIcon fontSize="small" />}

@@ -13,6 +13,7 @@
   "loginLine3": "Sharpen your skills. Climb the leaderboard. Rule the grid.",
   "errorLoadingTasks": "Error: Failed to load tasks",
   "navHome": "Home",
+  "navTasks": "Tasks",
   "navDashboard": "Dashboard",
   "navLogout": "Logout",
   "task": {
@@ -45,6 +46,31 @@
   "taskDetails": {
     "startTask": "Start Task",
     "sshKey": "SSH Key"
+  },
+
+  "ssh": {
+    "downloadButton": "Download SSH Key",
+    "downloading": "Downloading...",
+    "downloaded": "Key Downloaded ✓",
+    "authRequired": "Authentication required. Please log in again.",
+    "invalidFormat": "Received invalid SSH key format",
+    "downloadFailed": "Download failed: {{message}}",
+    "chmodTipPrefix": "Tip: Run",
+    "chmodTipSuffix": "after saving the key."
+  },
+
+  "home": {
+    "tagline": "Master Ethical Hacking Through Real-World Challenges",
+    "description1": "Welcome to HackLab, the ultimate platform for cybersecurity enthusiasts and ethical hackers.",
+    "description2": "Challenge yourself with real-world cybersecurity scenarios, from network security to application vulnerabilities.",
+    "features": "What You'll Do",
+    "feature1": "Solve challenging cybersecurity problems",
+    "feature2": "Practice ethical hacking in controlled environments",
+    "feature3": "Compete on the global leaderboard",
+    "feature4": "Develop production-ready security skills",
+    "cta": "Get Started Now",
+    "alreadyMember": "Already a member?",
+    "goToTasks": "Go to Tasks"
   }
 
 

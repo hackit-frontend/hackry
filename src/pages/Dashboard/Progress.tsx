@@ -46,7 +46,7 @@ const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
 
   if (!isAuthenticated)
     return (
-      <Typography sx={{ color: "#00ff88", fontFamily: "Fira Code" }}>
+      <Typography sx={{ color: "#00FF00", fontFamily: "Fira Code" }}>
         Please login to see progress.
       </Typography>
     );
@@ -75,7 +75,7 @@ const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
                   height: 10,
                   borderRadius: 5,
                   bgcolor: "#222",
-                  "& .MuiLinearProgress-bar": { bgcolor: "#00ff88" },
+                  "& .MuiLinearProgress-bar": { bgcolor: "#00FF00" },
                 }}
               />
               <Typography sx={{ mt: 1 }}>{Math.round(percentage)}%</Typography>
