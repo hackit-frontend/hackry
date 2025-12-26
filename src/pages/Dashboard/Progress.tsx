@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Card, CardContent, LinearProgress } from "@mui/material";
+import { API_BASE } from "../../constants";
 
 interface UserProgress {
   completedTasks: number;
@@ -22,12 +23,20 @@ const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
       try {
         setLoading(true);
         setError(null);
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Not authenticated");
         const [tasksRes, completedRes] = await Promise.all([
-          fetch("https://backend.hacklab.uz/tasks", {
-            credentials: "include",
+          fetch(`${API_BASE}tasks`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true",
+            },
           }),
-          fetch("https://backend.hacklab.uz/me/completed", {
-            credentials: "include",
+          fetch(`${API_BASE}me/completed`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "ngrok-skip-browser-warning": "true",
+            },
           }),
         ]);
 

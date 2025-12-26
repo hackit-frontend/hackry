@@ -52,6 +52,16 @@ const Navbar: React.FC<Props> = ({ token }) => {
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+          {token && (
+            <Button
+              component={Link}
+              to="/tasks"
+              sx={{ color: "#00FF00", fontFamily: "Fira Code" }}
+            >
+              {t("navTasks")}
+            </Button>
+          )}
+
           <Button
             component={Link}
             to="/dashboard"

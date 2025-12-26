@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useTranslation } from "react-i18next";
+import { API_BASE } from "../../constants";
 
 interface UserStats {
   completedTasks: number;
@@ -42,9 +43,15 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
       try {
         setLoading(true);
         setError(null);
-        const res = await fetch("https://backend.hacklab.uz/profile", {
+        const token = localStorage.getItem("access_token");
+        if (!token) throw new Error("Not authenticated");
+
+        const res = await fetch(`${API_BASE}me`, {
           method: "GET",
-          credentials: "include", // sends cookie
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
         });
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
@@ -68,10 +75,16 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
     try {
       setSaving(true);
       setError(null);
-      const res = await fetch("https://backend.hacklab.uz/profile", {
+      const token = localStorage.getItem("access_token");
+      if (!token) throw new Error("Not authenticated");
+
+      const res = await fetch(`${API_BASE}me`, {
         method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true",
+        },
         body: JSON.stringify({ name, surname }),
       });
       if (!res.ok) throw new Error("Failed to update profile");
