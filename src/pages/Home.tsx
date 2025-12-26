@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Button, Container } from "@mui/material";
+import { Box, Typography,  Container } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
 const Home: React.FC = () => {
