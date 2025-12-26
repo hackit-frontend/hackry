@@ -20,7 +20,7 @@ const Dashboard: React.FC<DashboardProps> = ({ sshKey, isAuthenticated, onLogout
       }}
     >
       <Box sx={{ flex: 1, minWidth: 300 }}>
-        <Profile sshKey={sshKey} isAuthenticated={isAuthenticated} onLogout={onLogout} />
+        <Profile sshKey={sshKey} isAuthenticated={isAuthenticated} />
       </Box>
 
       <Box sx={{ flex: 1, minWidth: 300 }}>

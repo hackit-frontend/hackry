@@ -22,10 +22,9 @@ interface UserStats {
 interface ProfileProps {
   sshKey?: string | null;
   isAuthenticated: boolean;
-  onLogout: () => void;
 }
 
-const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) => {
+const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, }) => {
   const { t } = useTranslation();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
@@ -103,7 +102,7 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
   const handleCopy = () => {
     if (sshKey) {
       navigator.clipboard.writeText(sshKey);
-      alert("✅ SSH key copied to clipboard!");
+      alert("SSH key copied to clipboard!");
     }
   };
 
@@ -161,7 +160,6 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
         </CardContent>
       </Card>
 
-      {/* Editable fields */}
       {!loading && !error && (
         <Box sx={{ mt: 3, display: "grid", gap: 2 }}>
           <Box>
@@ -262,26 +260,6 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, onLogout }) 
         )}
       </Box>
 
-      {/* Logout Button */}
-      <Box sx={{ mt: 4 }}>
-        <Button
-          onClick={onLogout}
-          fullWidth
-          sx={{
-            color: "#FF0000",
-            fontFamily: "Fira Code",
-            border: "1px solid #FF0000",
-            borderRadius: "8px",
-            py: 1.5,
-            "&:hover": { 
-              bgcolor: "#FF000044",
-              borderColor: "#FF3333",
-            },
-          }}
-        >
-          {t("navLogout")}
-        </Button>
-      </Box>
     </Box>
   );
 };
