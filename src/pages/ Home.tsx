@@ -217,7 +217,6 @@ const Home: React.FC = () => {
             </Select>
           </FormControl>
 
-          {/* Search */}
           <TextField
             placeholder={t("searchPlaceholder")}
             variant="outlined"
@@ -234,7 +233,6 @@ const Home: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Errors */}
       {sshError && (
         <Alert severity="error" sx={{ mb: 2, fontFamily: "Fira Code" }}>
           {sshError}
@@ -247,7 +245,6 @@ const Home: React.FC = () => {
         </Alert>
       )}
 
-      {/* Task Grid */}
       <Box
         sx={{
           display: "grid",
@@ -259,7 +256,6 @@ const Home: React.FC = () => {
           <TaskCard
             key={task.id}
             task={task}
-            // Stable callback — no page reload!
             onView={() => handleOpenDetails(task)}
           />
         ))}
@@ -284,7 +280,6 @@ const Home: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Optional tip after download */}
       {sshDownloaded && (
         <Typography
           variant="body2"

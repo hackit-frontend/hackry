@@ -265,7 +265,6 @@ const Tasks: React.FC = () => {
         ))}
       </Box>
 
-      {/* Task Details Modal */}
       <Dialog
         open={openDetails}
         onClose={handleCloseDetails}

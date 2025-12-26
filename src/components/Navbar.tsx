@@ -17,10 +17,24 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
   };
 
 
- 
-const handleLogin = () => {
-  window.location.href = 'https://backend.hacklab.uz/auth/google';
-}
+  //   flow: "implicit", // popup
+  //   onSuccess: async (tokenResponse) => {
+  //     console.log("Google Token:", tokenResponse);
+
+  //     await fetch("https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/google", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ access_token: tokenResponse.access_token }),
+  //     });
+  //   },
+  //   onError: () => {
+  //     console.log("Google Login Failed");
+  //   },
+  // });
+  const handelLogin = () => { 
+    window.location.href = "https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/google";
+  }
+
   return (
     <AppBar position="static" sx={{ bgcolor: "black", boxShadow: "none" }}>
       <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -39,16 +53,6 @@ const handleLogin = () => {
         </Typography>
 
         <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          {token && (
-            <Button
-              component={Link}
-              to="/tasks"
-              sx={{ color: "#00FF00", fontFamily: "Fira Code" }}
-            >
-              {t("navTasks")}
-            </Button>
-          )}
-
           <Button
             component={Link}
             to="/dashboard"
@@ -72,7 +76,7 @@ const handleLogin = () => {
             </Button>
           ) : (
             <Button
-              onClick={handleLogin}
+              onClick={handelLogin}
               sx={{
                 color: "#00FF00",
                 fontFamily: "Fira Code",
