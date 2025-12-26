@@ -97,8 +97,13 @@ const Progress: React.FC<ProgressProps> = ({ isAuthenticated }) => {
                 sx={{
                   height: 10,
                   borderRadius: 5,
-                  bgcolor: "#222",
-                  "& .MuiLinearProgress-bar": { bgcolor: "#00FF00" },
+                  overflow: "hidden",
+                  bgcolor: "transparent",
+                  backgroundImage:
+                    "repeating-linear-gradient(45deg, #1a1a1a 0px, #1a1a1a 10px, #222 10px, #222 20px)",
+                  "& .MuiLinearProgress-bar": {
+                    bgcolor: "#00FF00",
+                  },
                 }}
               />
               <Typography sx={{ mt: 1 }}>{Math.round(percentage)}%</Typography>
