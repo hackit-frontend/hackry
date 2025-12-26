@@ -61,12 +61,10 @@
 
   "home": {
     "tagline": "Master Ethical Hacking Through Real-World Challenges",
-    "description1": "Welcome to HackLab, the ultimate platform for cybersecurity enthusiasts and ethical hackers.",
-    "description2": "Challenge yourself with real-world cybersecurity scenarios, from network security to application vulnerabilities.",
     "features": "What You'll Do",
-    "feature1": "Solve challenging cybersecurity problems",
-    "feature2": "Practice ethical hacking in controlled environments",
-    "feature3": "Compete on the global leaderboard",
+    "feature1": "Challenging cybersecurity problems",
+    "feature2": "Ethical hacking in controlled environments",
+    "feature3": "Competing on the global leaderboard",
     "feature4": "Develop production-ready security skills",
     "cta": "Get Started Now",
     "alreadyMember": "Already a member?",

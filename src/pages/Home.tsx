@@ -9,7 +9,7 @@ const Home: React.FC = () => {
   return (
     <Box
       sx={{
-        minHeight: "100vh",
+        minHeight: "80vh",
         background: "0A0A0A",
         color: "#fff",
         pt: { xs: 4, md: 8 },
@@ -44,33 +44,7 @@ const Home: React.FC = () => {
             {t("home.tagline")}
           </Typography>
 
-          <Typography
-            variant="body1"
-            sx={{
-              color: "#ccc",
-              mb: 2,
-              fontSize: { xs: "1rem", md: "1.1rem" },
-              maxWidth: "600px",
-              mx: "auto",
-              lineHeight: 1.8,
-            }}
-          >
-            {t("home.description1")}
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              color: "#aaa",
-              mb: 4,
-              fontSize: { xs: "0.95rem", md: "1rem" },
-              maxWidth: "700px",
-              mx: "auto",
-              lineHeight: 1.8,
-            }}
-          >
-            {t("home.description2")}
-          </Typography>
+   
         </Box>
 
         <Box sx={{ mb: { xs: 6, md: 8 } }}>

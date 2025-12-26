@@ -9,7 +9,7 @@
   "footerText": "Xakerlik ko‘nikmalaringizni oshiring",
   "loginWithGoogle": "Kirish",
   "loginLine1": "Hackry platformasiga xush kelibsiz — bu axloqiy xakerlar uchun maydon.",
-  "loginLine2": "Haqiqiy kiberxavfsizlik muammolarini hal qiling.",
+  "loginLine2": "Haqiqiy Xavfsizlik Muammolari Orqali Xakerlikni O'rganing",
   "loginLine3": "Ko‘nikmalaringizni oshiring. Reytingda yuqoriga chiqing. Tizimni zabt eting.",
   "navHome": "Bosh sahifa",
   "navTasks": "Vazifalar",
@@ -58,13 +58,11 @@
 
   "home": {
     "tagline": "Haqiqiy Xavfsizlik Muammolari Orqali Xakerlikni O'rganing",
-    "description1": "HackLab platformasiga xush kelibsiz — kiberxavfsizlik va axloqiy xakerlar uchun eng yaxshi platforma.",
-    "description2": "Haqiqiy kiberxavfsizlik stsenariylarini sinab ko'ring: tarmoq xavfsizligidan dastur zaif tomonlari qadar.",
     "features": "Nima Qilasiz",
-    "feature1": "Murakkab kiberxavfsizlik muammolarini hal qiling",
-    "feature2": "Nazorat qilingan muhitda axloqiy xakerlikni amaliyotda qo'llang",
-    "feature3": "Global reytingda raqobat qiling",
-    "feature4": "Ishlab chiqarishga tayyor xavfsizlik malakasini rivojlantiring",
+    "feature1": "Murakkab kiberxavfsizlik muammolari",
+    "feature2": "Nazorat qilingan muhitda axloqiy xakerlik amaliyotda",
+    "feature3": "Global reytingda raqobat",
+    "feature4": "Ishlab chiqarishga tayyor xavfsizlik malakasi",
     "cta": "Hozir Boshlang",
     "alreadyMember": "Allaqachon a'zo?",
     "goToTasks": "Vazifalarga O'ting"
