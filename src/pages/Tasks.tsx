@@ -106,7 +106,7 @@ const Tasks: React.FC<TasksProps> = ({ setIsAuthenticated }) => {
       setSshError(null);
 
       const response = await fetch(
-        "https://unrefulgently-unitalicized-greta.ngrok-free.dev/me/ssh/private",
+        "https://xurshid97.jprq.live//me/ssh/private",
         {
           method: "GET",
           headers: {
