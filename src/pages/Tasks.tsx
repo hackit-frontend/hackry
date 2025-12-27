@@ -58,12 +58,20 @@ const Tasks: React.FC = () => {
       },
     })
       .then((res) => {
+        if (res.status === 401 || res.status === 403) {
+          localStorage.removeItem("access_token");
+          throw new Error("unauthorized");
+        }
         if (!res.ok) throw new Error("Failed to load tasks");
         return res.json();
       })
       .then((data) => setTasks(data))
       .catch((err) => {
         console.error(err);
+        if (err?.message === "unauthorized") {
+          setError(t("ssh.authRequired"));
+          return;
+        }
         setError(t("errorLoadingTasks"));
       });
   }, [t]);
@@ -85,7 +93,7 @@ const Tasks: React.FC = () => {
       return;
     }
 
-      try {
+    try {
       setLoadingSsh(true);
       setSshError(null);
 
@@ -99,6 +107,11 @@ const Tasks: React.FC = () => {
           },
         }
       );
+
+      if (response.status === 401 || response.status === 403) {
+        localStorage.removeItem("access_token");
+        throw new Error(t("ssh.authRequired"));
+      }
 
       if (!response.ok) {
         throw new Error(`Failed to fetch key (${response.status})`);

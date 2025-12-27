@@ -7,6 +7,11 @@ export async function fetchSSHKey(token: string): Promise<string | null> {
       },
     });
 
+    if (res.status === 401 || res.status === 403) {
+      localStorage.removeItem("access_token");
+      return null;
+    }
+
     if (!res.ok) {
       console.error("Failed to fetch SSH key:", res.statusText);
       return null;

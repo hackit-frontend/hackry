@@ -34,9 +34,21 @@ const App: React.FC = () => {
   useEffect(() => {
     const loadKey = async () => {
       const token = localStorage.getItem("access_token");
-      if (!token) return;
+      if (!token) {
+        setIsAuthenticated(false);
+        return;
+      }
+
       const key = await fetchSSHKey(token);
-      if (key) setSshKey(key);
+
+      if (!key) {
+        if (!localStorage.getItem("access_token")) {
+          setIsAuthenticated(false);
+        }
+        return;
+      }
+
+      setSshKey(key);
     };
 
     if (isAuthenticated) {

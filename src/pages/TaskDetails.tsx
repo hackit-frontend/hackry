@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -45,10 +45,28 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
   const [containerInfo, setContainerInfo] = useState<ContainerInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
+  const storageKey = `task_container_${task.id}`;
+
+  useEffect(() => {
+    const saved = localStorage.getItem(storageKey);
+    if (!saved) return;
+    try {
+      const parsed: ContainerInfo = JSON.parse(saved);
+      setContainerInfo(parsed);
+    } catch (err) {
+      console.error("Failed to restore container info", err);
+      localStorage.removeItem(storageKey);
+    }
+  }, [storageKey]);
 
   const handleStart = () => {
     setLoading(true);
     const token = localStorage.getItem("access_token");
+
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
     fetch(`${API_BASE}tasks/${task.id}/start`, {
       method: "POST",
@@ -63,6 +81,7 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
       .then((data: ApiResponse) => {
         if (data.status === "ok" && data.container_info) {
           setContainerInfo(data.container_info);
+          localStorage.setItem(storageKey, JSON.stringify(data.container_info));
         }
       })
       .catch(console.error)
@@ -110,7 +129,7 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
             sx={{ mb: 3, bgcolor: "#001a0a", border: "1px solid #00FF00" }}
           >
             <Typography variant="subtitle1" fontWeight="bold">
-              Success! Your SSH container is ready 🚀
+              Success! Your SSH container is ready 
             </Typography>
           </Alert>
 
