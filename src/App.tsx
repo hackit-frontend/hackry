@@ -80,8 +80,8 @@ const App: React.FC = () => {
 
       <Routes>
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} isAuthenticated={isAuthenticated}  />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/" element={isAuthenticated ? <Tasks /> : <Home />} />
+        <Route path="/tasks" element={<Tasks setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/" element={isAuthenticated ? <Tasks setIsAuthenticated={setIsAuthenticated} /> : <Home />} />
         <Route path="/"element={<Home/>}/>
       </Routes>
     </>

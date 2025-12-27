@@ -26,7 +26,11 @@ interface Task {
   description: string;
 }
 
-const Tasks: React.FC = () => {
+interface TasksProps {
+  setIsAuthenticated: (value: boolean) => void;
+}
+
+const Tasks: React.FC<TasksProps> = ({ setIsAuthenticated }) => {
   const { t } = useTranslation();
 
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -44,6 +48,7 @@ const Tasks: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem("access_token");
 
+    
     if (!token) {
       setError(t("errorLoadingTasks"));
       return;
@@ -59,7 +64,9 @@ const Tasks: React.FC = () => {
     })
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
+
           localStorage.clear();
+            setIsAuthenticated(false);
           throw new Error("unauthorized");
         }
         if (!res.ok) throw new Error("Failed to load tasks");
