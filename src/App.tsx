@@ -21,6 +21,16 @@ const App: React.FC = () => {
 
     if (token) {
       localStorage.setItem("access_token", token);
+      try {
+        const parts = token.split('.');
+        if (parts.length === 3) {
+          const payload = JSON.parse(atob(parts[1]));
+          if (payload.given_name) localStorage.setItem("user_given_name", payload.given_name);
+          if (payload.family_name) localStorage.setItem("user_family_name", payload.family_name);
+        }
+      } catch (err) {
+        console.error("Failed to decode token", err);
+      }
       setIsAuthenticated(true);
     }
   }, [navigate]);

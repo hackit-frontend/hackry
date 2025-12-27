@@ -48,7 +48,7 @@
   "ssh": {
     "downloadButton": "SSH kalitini yuklab olish",
     "downloading": "Yuklanmoqda...",
-    "downloaded": "Kalit yuklandi ✓",
+    "downloaded": "Kalit yuklandi",
     "authRequired": "Autentifikatsiya talab qilinadi. Iltimos, qayta kiring.",
     "invalidFormat": "SSH kalit formati noto‘g‘ri",
     "downloadFailed": "Yuklab olish muvaffaqiyatsiz: {{message}}",

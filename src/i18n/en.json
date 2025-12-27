@@ -51,7 +51,7 @@
   "ssh": {
     "downloadButton": "Download SSH Key",
     "downloading": "Downloading...",
-    "downloaded": "Key Downloaded ✓",
+    "downloaded": "Key Downloaded",
     "authRequired": "Authentication required. Please log in again.",
     "invalidFormat": "Received invalid SSH key format",
     "downloadFailed": "Download failed: {{message}}",

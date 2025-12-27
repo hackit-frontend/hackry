@@ -36,6 +36,11 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, }) => {
   useEffect(() => {
     if (!isAuthenticated) return;
 
+    const storedGivenName = localStorage.getItem("user_given_name") || "";
+    const storedFamilyName = localStorage.getItem("user_family_name") || "";
+    setName(storedGivenName);
+    setSurname(storedFamilyName);
+
     const fetchProfile = async () => {
       try {
         setLoading(true);
@@ -53,8 +58,8 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, }) => {
         if (!res.ok) throw new Error("Failed to fetch profile");
         const data = await res.json();
         setStats(data);
-        setName(data.name || "");
-        setSurname(data.surname || "");
+        setName(data.name || storedGivenName);
+        setSurname(data.surname || storedFamilyName);
         setEmail(data.email || "");
       } catch (err) {
         console.error(err);
@@ -87,8 +92,12 @@ const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, }) => {
       if (!res.ok) throw new Error("Failed to update profile");
       const data = await res.json();
       setStats(data);
-      setName(data.name || name);
-      setSurname(data.surname || surname);
+      const updatedName = data.name || name;
+      const updatedSurname = data.surname || surname;
+      setName(updatedName);
+      setSurname(updatedSurname);
+      localStorage.setItem("user_given_name", updatedName);
+      localStorage.setItem("user_family_name", updatedSurname);
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Failed to update profile");
