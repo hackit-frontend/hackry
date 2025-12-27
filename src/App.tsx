@@ -82,7 +82,7 @@ const App: React.FC = () => {
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} isAuthenticated={isAuthenticated}  />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/" element={isAuthenticated ? <Tasks /> : <Home />} />
-        <Route path="/"element={!isAuthenticated ? <Home/> : <Tasks />} />
+        <Route path="/"element={<Home/>}/>
       </Routes>
     </>
   );
