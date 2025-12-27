@@ -18,7 +18,7 @@ import TaskCard from "../components/TaskCard";
 import TaskDetails from "./TaskDetails";
 import DownloadIcon from "@mui/icons-material/Download";
 import KeyIcon from "@mui/icons-material/VpnKey";
-
+import { API_BASE } from "../constants.ts";
 interface Task {
   id: string;
   title: string;
@@ -54,7 +54,7 @@ const Tasks: React.FC<TasksProps> = ({ setIsAuthenticated }) => {
       return;
     }
 
-    fetch("https://unrefulgently-unitalicized-greta.ngrok-free.dev/tasks", {
+    fetch(`${API_BASE}tasks`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

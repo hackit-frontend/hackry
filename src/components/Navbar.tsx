@@ -71,7 +71,7 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
   };
 
   const handelLogin = () => { 
-    window.location.href = "https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/login";
+    window.location.href = `${API_BASE}auth/login`;
   }
 
   return (
