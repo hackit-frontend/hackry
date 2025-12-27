@@ -1,1 +1,1 @@
-export const API_BASE = "https://hacklab-api.jprq.live/auth/login/";
+export const API_BASE = "https://hacklab-api.jprq.live/";
