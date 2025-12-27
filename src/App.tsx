@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Home from "./pages/Home";
 import Tasks from "./pages/Tasks";
@@ -84,6 +85,8 @@ const App: React.FC = () => {
         <Route path="/" element={isAuthenticated ? <Tasks setIsAuthenticated={setIsAuthenticated} /> : <Home />} />
         <Route path="/"element={<Home/>}/>
       </Routes>
+
+      <Footer />
     </>
   );
 };
