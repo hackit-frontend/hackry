@@ -8,7 +8,7 @@ export async function fetchSSHKey(token: string): Promise<string | null> {
     });
 
     if (res.status === 401 || res.status === 403) {
-      localStorage.removeItem("access_token");
+      localStorage.clear();
       return null;
     }
 

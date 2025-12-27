@@ -59,7 +59,7 @@ const Tasks: React.FC = () => {
     })
       .then((res) => {
         if (res.status === 401 || res.status === 403) {
-          localStorage.removeItem("access_token");
+          localStorage.clear();
           throw new Error("unauthorized");
         }
         if (!res.ok) throw new Error("Failed to load tasks");
@@ -89,6 +89,7 @@ const Tasks: React.FC = () => {
   const handleDownloadSshKey = async () => {
     const token = localStorage.getItem("access_token");
     if (!token) {
+      localStorage.clear();
       setSshError(t("ssh.authRequired"));
       return;
     }
@@ -109,7 +110,7 @@ const Tasks: React.FC = () => {
       );
 
       if (response.status === 401 || response.status === 403) {
-        localStorage.removeItem("access_token");
+        localStorage.clear();
         throw new Error(t("ssh.authRequired"));
       }
 

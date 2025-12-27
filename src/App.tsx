@@ -35,6 +35,7 @@ const App: React.FC = () => {
     const loadKey = async () => {
       const token = localStorage.getItem("access_token");
       if (!token) {
+        localStorage.clear();
         setIsAuthenticated(false);
         return;
       }
@@ -44,6 +45,7 @@ const App: React.FC = () => {
       if (!key) {
         if (!localStorage.getItem("access_token")) {
           setIsAuthenticated(false);
+          localStorage.clear();
         }
         return;
       }
@@ -80,6 +82,7 @@ const App: React.FC = () => {
         <Route path="/dashboard" element={<Dashboard sshKey={sshKey} isAuthenticated={isAuthenticated}  />} />
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/" element={isAuthenticated ? <Tasks /> : <Home />} />
+        <Route path="/"element={!isAuthenticated ? <Home/> : <Tasks />} />
       </Routes>
     </>
   );

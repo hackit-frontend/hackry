@@ -64,6 +64,7 @@ const TaskDetails: React.FC<Props> = ({ task }) => {
     const token = localStorage.getItem("access_token");
 
     if (!token) {
+      localStorage.clear();
       setLoading(false);
       return;
     }
