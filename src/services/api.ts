@@ -1,7 +1,7 @@
 import { API_BASE } from "../constants";
 export async function fetchSSHKey(token: string): Promise<string | null> {
   try {
-    const res = await fetch(`${API_BASE}/me/ssh/public`, {
+    const res = await fetch(`${API_BASE}me/ssh/public`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
