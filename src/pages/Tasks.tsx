@@ -29,22 +29,18 @@ interface Task {
 const Tasks: React.FC = () => {
   const { t } = useTranslation();
 
-  // Tasks & filters
   const [tasks, setTasks] = useState<Task[]>([]);
   const [search, setSearch] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("All");
   const [error, setError] = useState<string | null>(null);
 
-  // Task details modal
   const [openDetails, setOpenDetails] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
-  // SSH key download
   const [loadingSsh, setLoadingSsh] = useState(false);
   const [sshDownloaded, setSshDownloaded] = useState(false);
   const [sshError, setSshError] = useState<string | null>(null);
 
-  // Fetch tasks on mount
   useEffect(() => {
     const token = localStorage.getItem("access_token");
 
@@ -72,7 +68,6 @@ const Tasks: React.FC = () => {
       });
   }, [t]);
 
-  // Open task details
   const handleOpenDetails = useCallback((task: Task) => {
     setSelectedTask(task);
     setOpenDetails(true);
@@ -83,7 +78,6 @@ const Tasks: React.FC = () => {
     setSelectedTask(null);
   };
 
-  // Download SSH private key
   const handleDownloadSshKey = async () => {
     const token = localStorage.getItem("access_token");
     if (!token) {
@@ -91,7 +85,6 @@ const Tasks: React.FC = () => {
       return;
     }
 
-    // @ts-ignore
       try {
       setLoadingSsh(true);
       setSshError(null);
@@ -138,7 +131,6 @@ const Tasks: React.FC = () => {
     }
   };
 
-  // Filter tasks
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch = task.title.toLowerCase().includes(search.toLowerCase());
     const matchesDifficulty =
@@ -148,7 +140,6 @@ const Tasks: React.FC = () => {
 
   return (
     <Box sx={{ p: { xs: 2, md: 4 } }}>
-      {/* Header: Title + Controls */}
       <Box
         sx={{
           display: "flex",
@@ -217,7 +208,6 @@ const Tasks: React.FC = () => {
             </Select>
           </FormControl>
 
-          {/* Search */}
           <TextField
             placeholder={t("searchPlaceholder")}
             variant="outlined"
@@ -234,7 +224,6 @@ const Tasks: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Errors */}
       {sshError && (
         <Alert severity="error" sx={{ mb: 2, fontFamily: "Fira Code" }}>
           {sshError}
@@ -247,7 +236,6 @@ const Tasks: React.FC = () => {
         </Alert>
       )}
 
-      {/* Task Grid */}
       <Box
         sx={{
           display: "grid",
@@ -259,7 +247,6 @@ const Tasks: React.FC = () => {
           <TaskCard
             key={task.id}
             task={task}
-            // Stable callback — no page reload!
             onView={() => handleOpenDetails(task)}
           />
         ))}
@@ -283,7 +270,6 @@ const Tasks: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {/* Optional tip after download */}
       {sshDownloaded && (
         <Typography
           variant="body2"

@@ -6,10 +6,9 @@ import Progress from "./Progress";
 interface DashboardProps {
   sshKey?: string | null;
   isAuthenticated: boolean;
-  onLogout: () => void;
 }
 
-const Dashboard: React.FC<DashboardProps> = ({ sshKey, isAuthenticated, onLogout }) => {
+const Dashboard: React.FC<DashboardProps> = ({ sshKey, isAuthenticated }) => {
   return (
     <Box
       sx={{

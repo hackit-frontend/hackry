@@ -8,7 +8,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useTranslation } from "react-i18next";
 import { API_BASE } from "../../constants";
 
 interface UserStats {
@@ -25,7 +24,6 @@ interface ProfileProps {
 }
 
 const Profile: React.FC<ProfileProps> = ({ sshKey, isAuthenticated, }) => {
-  const { t } = useTranslation();
   const [stats, setStats] = useState<UserStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

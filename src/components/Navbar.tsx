@@ -70,21 +70,6 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
     onLogout();
   };
 
-
-  //   flow: "implicit", // popup
-  //   onSuccess: async (tokenResponse) => {
-  //     console.log("Google Token:", tokenResponse);
-
-  //     await fetch("https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/google", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ access_token: tokenResponse.access_token }),
-  //     });
-  //   },
-  //   onError: () => {
-  //     console.log("Google Login Failed");
-  //   },
-  // });
   const handelLogin = () => { 
     window.location.href = "https://unrefulgently-unitalicized-greta.ngrok-free.dev/auth/login";
   }

@@ -27,7 +27,6 @@ const AdminPanel: React.FC = () => {
   });
   const [editingId, setEditingId] = useState<string | null>(null);
 
-  // Fetch all tasks
   const fetchTasks = async () => {
     try {
       const res = await fetch(API_URL);
@@ -42,7 +41,6 @@ const AdminPanel: React.FC = () => {
     fetchTasks();
   }, []);
 
-  // Add new task
   const handleAdd = async () => {
     if (!newTask.title || !newTask.description) return alert("Fill all fields");
     try {
@@ -58,7 +56,6 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  // Delete task
   const handleDelete = async (id: string) => {
     if (!window.confirm("Delete this task?")) return;
     try {
@@ -69,13 +66,11 @@ const AdminPanel: React.FC = () => {
     }
   };
 
-  // Edit task
   const handleEdit = (task: Task) => {
     setEditingId(task._id || null);
     setNewTask(task);
   };
 
-  // Save updated task
   const handleUpdate = async () => {
     if (!editingId) return;
     try {
@@ -106,7 +101,6 @@ const AdminPanel: React.FC = () => {
         Admin Panel
       </Typography>
 
-      {/* Add / Edit Task */}
       <Box
         sx={{
           display: "flex",
@@ -184,7 +178,6 @@ const AdminPanel: React.FC = () => {
         )}
       </Box>
 
-      {/* Task List */}
       <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
         {tasks.map((task) => (
           <Card
