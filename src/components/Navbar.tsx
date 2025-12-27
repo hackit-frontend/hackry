@@ -110,7 +110,7 @@ const Navbar: React.FC<Props> = ({ token, onLogout }) => {
           {token && (
             <Button
               component={Link}
-              to="/tasks"
+              to="/"
               sx={{ color: "#00FF00", fontFamily: "Fira Code" }}
             >
               {t("navTasks")}
